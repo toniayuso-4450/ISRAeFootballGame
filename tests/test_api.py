@@ -25,6 +25,41 @@ def client(tmp_path):
     with app_module.app.app_context():
         app_module.db.create_all()
         app_module.get_or_create_global_state()
+        # El motor SQLAlchemy se vincula a la URI del fichero al
+        # importar la app, así que el `:memory:` de arriba no surte
+        # efecto: los tests COMPARTEN la fila live_state. Para que los
+        # tests del merge backend partan de un estado limpio, reseteamos
+        # explícitamente la fila a su valor por defecto al inicio de
+        # cada test (no toca otras tablas/filas para no afectar al
+        # resto de la suite ni a la BD de desarrollo).
+        live_row = app_module.GlobalState.query.filter_by(
+            clave=app_module.LIVE_STATE_KEY
+        ).first()
+        if live_row is not None:
+            live_row.valor_json = json.dumps(app_module.DEFAULT_LIVE_STATE)
+            live_row.updated_at = app_module.utc_now_iso()
+            app_module.db.session.commit()
+        # Mismo razonamiento para `global_state`: un test que escriba
+        # {copa_state: {resultados: "foo"}} dejaba el string ahí para
+        # el siguiente test, que esperaba lista y fallaba. Reseteamos
+        # a DEFAULT_GLOBAL_STATE para garantizar aislamiento.
+        gs_row = app_module.GlobalState.query.filter_by(
+            clave=app_module.GLOBAL_STATE_KEY
+        ).first()
+        if gs_row is not None:
+            gs_row.valor_json = json.dumps(app_module.DEFAULT_GLOBAL_STATE)
+            gs_row.updated_at = app_module.utc_now_iso()
+            app_module.db.session.commit()
+        # El calendario también vive en GlobalState (clave
+        # `calendario_global_v1`) para sobrevivir reinicios en Railway,
+        # así que aplica el mismo aislamiento entre tests: borramos la
+        # fila para que cada test re-siembre desde `calendario.json`.
+        cal_row = app_module.GlobalState.query.filter_by(
+            clave=app_module.CALENDARIO_GLOBAL_KEY
+        ).first()
+        if cal_row is not None:
+            app_module.db.session.delete(cal_row)
+            app_module.db.session.commit()
 
     with app_module.app.test_client() as c:
         yield c
@@ -300,6 +335,75 @@ class TestCopaAPI:
 
 
 # ---------------------------------------------------------------------------
+# Reset forzado de Liga EA Sports  (/api/state/reset-liga)
+# ---------------------------------------------------------------------------
+
+class TestResetLiga:
+
+    def test_reset_liga_vacia_resultados_aunque_merge_parcial_no_lo_haga(self, client):
+        """Regresión: el POST parcial a /api/state con {liga_results:{}}
+        no vacía liga_results porque merge_dict preserva sub-claves.
+        El endpoint /api/state/reset-liga debe SÍ vaciarlo siempre,
+        usando replace=True en el servidor."""
+        # 1) Simular que hay resultados acumulados de una temporada.
+        client.post("/api/state", json={
+            "liga_results": {
+                "1|Real Madrid|FC Barcelona": {"gl": 2, "gv": 1},
+                "1|Athletic Club|Alavés": {"gl": 0, "gv": 0},
+            }
+        })
+        # 2) Confirmar que efectivamente se guardaron.
+        state = _json(client.get("/api/state"))["state"]
+        assert "1|Real Madrid|FC Barcelona" in (state.get("liga_results") or {})
+
+        # 3) El patch parcial con {} NO los limpia (este es el bug
+        # que motiva el endpoint nuevo).
+        client.post("/api/state", json={"liga_results": {}})
+        state_after_patch = _json(client.get("/api/state"))["state"]
+        assert "1|Real Madrid|FC Barcelona" in (state_after_patch.get("liga_results") or {}), \
+            "merge_dict con incoming vacío NO debería limpiar — comportamiento esperado que motiva /api/state/reset-liga"
+
+        # 4) El endpoint de reset sí los limpia.
+        rv = client.post("/api/state/reset-liga")
+        assert rv.status_code == 200
+        assert _json(rv)["ok"] is True
+        state_after_reset = _json(client.get("/api/state"))["state"]
+        assert (state_after_reset.get("liga_results") or {}) == {}
+
+    def test_reset_liga_acepta_nuevo_schedule_atomico(self, client):
+        """El endpoint puede recibir un schedule nuevo en el body para
+        aplicarlo a la vez que vacía los resultados (evita una ronda
+        extra de POST desde el cliente tras reiniciar)."""
+        # Schedule mínimamente válido: 38 jornadas con listas no vacías.
+        fake_schedule = [[["Equipo A", "Equipo B"]] for _ in range(38)]
+        rv = client.post("/api/state/reset-liga",
+                         json={"liga_schedule": fake_schedule})
+        assert rv.status_code == 200
+        state = _json(client.get("/api/state"))["state"]
+        assert (state.get("liga_results") or {}) == {}
+        # El schedule debe haberse aplicado.
+        assert state.get("liga_schedule") == fake_schedule
+
+    def test_reset_liga_no_toca_copa_ni_otros_estados(self, client):
+        """El reset de liga NO debe borrar copa_state, segunda_state,
+        etc. (sólo liga_results / liga_schedule)."""
+        # copa_state con formato válido (fase + sorteo como dict) para
+        # no contaminar el estado compartido con el resto de tests que
+        # asumen que `resultados` es dict-de-listas.
+        client.post("/api/state", json={
+            "liga_results": {"k": {"gl": 1, "gv": 0}},
+            "copa_state": {"fase": "oct", "sorteo": {"oct": [["A", "B"]]}},
+        })
+        client.post("/api/state/reset-liga")
+        state = _json(client.get("/api/state"))["state"]
+        assert (state.get("liga_results") or {}) == {}
+        # copa_state intacto
+        copa = state.get("copa_state") or {}
+        assert copa.get("fase") == "oct"
+        assert copa.get("sorteo") == {"oct": [["A", "B"]]}
+
+
+# ---------------------------------------------------------------------------
 # simular_y_guardar — event generation
 # ---------------------------------------------------------------------------
 
@@ -547,6 +651,339 @@ class TestLiveStateAPI:
         client.post("/api/live/state", json={"state": {"ml": {"m1": {"home": "A", "away": "B"}}}})
         client.post("/api/live/state", json={"state": {"ml": {"m2": {"home": "C", "away": "D"}}}})
         fetched = _json(client.get("/api/live/state"))
-        # Last-write-wins: m1 is gone, m2 is present
+        # Last-write-wins a nivel de qué partidos existen: m1 desaparece
+        # porque el segundo POST no lo incluye en su snapshot.
         assert "m1" not in fetched["state"]["ml"]
         assert "m2" in fetched["state"]["ml"]
+
+    # ── COEDICIÓN HUMANO vs HUMANO ──────────────────────────────────
+    # Los siguientes tests verifican que dos dispositivos pueden añadir
+    # eventos al MISMO partido sin que un POST le pise los eventos al
+    # otro (escenario: dos humanos jugando un partido HvH live, cada uno
+    # marcando goles/tarjetas desde su propio móvil).
+
+    def test_events_are_unioned_by_id_across_posts(self, client):
+        """Dos clientes añaden eventos distintos al mismo partido. Tras
+        el segundo POST, el servidor debe contener AMBOS eventos."""
+        match = {"home": "Real Madrid", "away": "Barcelona", "kickoffDone": True}
+        # Cliente A postea con el evento E_A
+        ev_a = {"id": "evt-a-001", "type": "gol", "team": "a", "min": 23,
+                "player": "Jugador A", "num": "9"}
+        client.post("/api/live/state", json={"state": {
+            "ml": {"hvh-1": dict(match, events=[ev_a])}
+        }})
+        # Cliente B postea con el evento E_B (no conoce E_A todavía)
+        ev_b = {"id": "evt-b-002", "type": "gol", "team": "b", "min": 31,
+                "player": "Jugador B", "num": "10"}
+        client.post("/api/live/state", json={"state": {
+            "ml": {"hvh-1": dict(match, events=[ev_b])}
+        }})
+        fetched = _json(client.get("/api/live/state"))
+        merged = fetched["state"]["ml"]["hvh-1"]["events"]
+        ids = sorted(e["id"] for e in merged)
+        assert ids == ["evt-a-001", "evt-b-002"]
+        # Y el marcador se recalcula a partir de los eventos: 1-1
+        assert fetched["state"]["ml"]["hvh-1"]["sc"] == {"a": 1, "b": 1}
+
+    def test_event_with_same_id_does_not_duplicate(self, client):
+        """Un cliente reposteando su snapshot con el mismo id no debe
+        crear duplicados (debounce + flush periódico repostea seguido)."""
+        ev = {"id": "evt-x", "type": "gol", "team": "a", "min": 10}
+        match = {"home": "A", "away": "B", "kickoffDone": True, "events": [ev]}
+        for _ in range(3):
+            client.post("/api/live/state", json={"state": {"ml": {"m": match}}})
+        fetched = _json(client.get("/api/live/state"))
+        assert len(fetched["state"]["ml"]["m"]["events"]) == 1
+
+    def test_event_update_with_same_id_overwrites(self, client):
+        """Editar un evento existente (mismo id, distinto contenido)
+        debe reemplazarlo en su sitio, no añadir uno nuevo."""
+        ev_v1 = {"id": "evt-1", "type": "amarilla", "team": "a", "min": 12,
+                 "player": "Pepe"}
+        client.post("/api/live/state", json={"state": {
+            "ml": {"m": {"home": "A", "away": "B", "kickoffDone": True,
+                          "events": [ev_v1]}}
+        }})
+        ev_v2 = dict(ev_v1, type="d-amarilla", min=45)
+        client.post("/api/live/state", json={"state": {
+            "ml": {"m": {"home": "A", "away": "B", "kickoffDone": True,
+                          "events": [ev_v2]}}
+        }})
+        fetched = _json(client.get("/api/live/state"))
+        evs = fetched["state"]["ml"]["m"]["events"]
+        assert len(evs) == 1
+        assert evs[0]["type"] == "d-amarilla"
+        assert evs[0]["min"] == 45
+
+    def test_legacy_events_without_id_dedup_by_content(self, client):
+        """Eventos sin id (clientes legacy) se deduplican por contenido
+        para que reposteos seguidos no creen duplicados."""
+        ev = {"type": "gol", "team": "a", "min": 7, "player": "X", "num": "11"}
+        match = {"home": "A", "away": "B", "kickoffDone": True, "events": [ev]}
+        client.post("/api/live/state", json={"state": {"ml": {"m": match}}})
+        client.post("/api/live/state", json={"state": {"ml": {"m": match}}})
+        fetched = _json(client.get("/api/live/state"))
+        assert len(fetched["state"]["ml"]["m"]["events"]) == 1
+
+    def test_timer_takes_max_across_posts(self, client):
+        """El cronómetro es monotónico: gana el valor más alto entre
+        dos snapshots concurrentes (no LWW que podría retroceder)."""
+        client.post("/api/live/state", json={"state": {
+            "ml": {"m": {"home": "A", "away": "B", "kickoffDone": True,
+                          "events": [], "timerSec": 600}}
+        }})
+        # Snapshot "atrasado" llega después; no debe pisar el timer.
+        client.post("/api/live/state", json={"state": {
+            "ml": {"m": {"home": "A", "away": "B", "kickoffDone": True,
+                          "events": [], "timerSec": 540}}
+        }})
+        fetched = _json(client.get("/api/live/state"))
+        assert fetched["state"]["ml"]["m"]["timerSec"] == 600
+
+    def test_monotonic_flags_latch_true(self, client):
+        """Las banderas como `finished`, `htDone`, `etDone` son
+        monotónicas: una vez en True, ningún snapshot posterior con
+        False puede revertirlas."""
+        client.post("/api/live/state", json={"state": {
+            "ml": {"m": {"home": "A", "away": "B", "kickoffDone": True,
+                          "htDone": True, "events": []}}
+        }})
+        client.post("/api/live/state", json={"state": {
+            "ml": {"m": {"home": "A", "away": "B", "kickoffDone": True,
+                          "htDone": False, "events": []}}
+        }})
+        fetched = _json(client.get("/api/live/state"))
+        assert fetched["state"]["ml"]["m"]["htDone"] is True
+
+    def test_score_recomputed_from_merged_events(self, client):
+        """El marcador se recalcula a partir de los eventos fusionados,
+        ignorando goles anulados por VAR."""
+        match = {"home": "A", "away": "B", "kickoffDone": True}
+        client.post("/api/live/state", json={"state": {
+            "ml": {"m": dict(match, events=[
+                {"id": "g1", "type": "gol", "team": "a", "min": 10},
+                {"id": "g2", "type": "gol", "team": "a", "min": 20},
+            ], varAnuladoIds=["g2"])}
+        }})
+        client.post("/api/live/state", json={"state": {
+            "ml": {"m": dict(match, events=[
+                {"id": "g3", "type": "propia", "team": "a", "min": 30},
+            ])}
+        }})
+        fetched = _json(client.get("/api/live/state"))
+        m = fetched["state"]["ml"]["m"]
+        assert sorted(e["id"] for e in m["events"]) == ["g1", "g2", "g3"]
+        # g1 cuenta para A. g2 anulado por VAR. g3 propia → cuenta para B.
+        assert m["sc"] == {"a": 1, "b": 1}
+
+    def test_var_anulado_ids_are_unioned(self, client):
+        """varAnuladoIds y redCards también se fusionan (set semantics)
+        para que dos dispositivos puedan anular distintos goles."""
+        match = {"home": "A", "away": "B", "kickoffDone": True, "events": [
+            {"id": "g1", "type": "gol", "team": "a", "min": 10},
+            {"id": "g2", "type": "gol", "team": "b", "min": 20},
+        ]}
+        client.post("/api/live/state", json={"state": {
+            "ml": {"m": dict(match, varAnuladoIds=["g1"])}
+        }})
+        client.post("/api/live/state", json={"state": {
+            "ml": {"m": dict(match, varAnuladoIds=["g2"])}
+        }})
+        fetched = _json(client.get("/api/live/state"))
+        anulados = fetched["state"]["ml"]["m"]["varAnuladoIds"]
+        assert sorted(anulados) == ["g1", "g2"]
+        # Ambos goles anulados → 0-0
+        assert fetched["state"]["ml"]["m"]["sc"] == {"a": 0, "b": 0}
+
+    def test_gm_live_merges_events_when_same_match(self, client):
+        """gmLive (modal de partido genérico) también une eventos cuando
+        el partido es el mismo (mismo j/home/away)."""
+        gm_a = {"j": 1, "home": "RM", "away": "FCB", "kickoffDone": True,
+                "events": [{"id": "e1", "type": "gol", "team": "a", "min": 5}]}
+        client.post("/api/live/state", json={"state": {"gmLive": gm_a}})
+        gm_b = dict(gm_a, events=[
+            {"id": "e2", "type": "gol", "team": "b", "min": 8}
+        ])
+        client.post("/api/live/state", json={"state": {"gmLive": gm_b}})
+        fetched = _json(client.get("/api/live/state"))
+        ids = sorted(e["id"] for e in fetched["state"]["gmLive"]["events"])
+        assert ids == ["e1", "e2"]
+
+    def test_gm_live_replaces_when_different_match(self, client):
+        """Si el `gmLive` cambia a OTRO partido (otro j/home/away), se
+        reemplaza por completo (no se mezclan eventos de partidos
+        distintos)."""
+        gm_a = {"j": 1, "home": "RM", "away": "FCB", "kickoffDone": True,
+                "events": [{"id": "e1", "type": "gol", "team": "a", "min": 5}]}
+        client.post("/api/live/state", json={"state": {"gmLive": gm_a}})
+        gm_b = {"j": 2, "home": "Atletico", "away": "Sevilla", "kickoffDone": True,
+                "events": [{"id": "z9", "type": "gol", "team": "a", "min": 10}]}
+        client.post("/api/live/state", json={"state": {"gmLive": gm_b}})
+        fetched = _json(client.get("/api/live/state"))
+        gl = fetched["state"]["gmLive"]
+        assert gl["home"] == "Atletico"
+        assert [e["id"] for e in gl["events"]] == ["z9"]
+
+
+# ---------------------------------------------------------------------------
+# Admin session (PIN 747) + CRUD del calendario editable
+# ---------------------------------------------------------------------------
+
+class TestAdminSession:
+
+    def test_status_anonymous_is_false(self, client):
+        rv = client.get("/api/admin/status")
+        assert rv.status_code == 200
+        assert _json(rv)["admin"] is False
+
+    def test_login_wrong_pin_returns_401(self, client):
+        rv = client.post("/api/admin/login", json={"pin": "000"})
+        assert rv.status_code == 401
+        assert _json(rv)["ok"] is False
+
+    def test_login_right_pin_sets_session(self, client):
+        rv = client.post("/api/admin/login", json={"pin": "747"})
+        assert rv.status_code == 200
+        assert _json(rv) == {"ok": True, "admin": True}
+        # La sesión persiste entre peticiones del mismo test_client
+        rv2 = client.get("/api/admin/status")
+        assert _json(rv2)["admin"] is True
+
+    def test_logout_clears_admin(self, client):
+        client.post("/api/admin/login", json={"pin": "747"})
+        rv = client.post("/api/admin/logout")
+        assert _json(rv) == {"ok": True, "admin": False}
+        rv2 = client.get("/api/admin/status")
+        assert _json(rv2)["admin"] is False
+
+
+class TestCalendario:
+
+    def _login(self, client):
+        client.post("/api/admin/login", json={"pin": "747"})
+
+    def test_get_calendario_shape(self, client):
+        rv = client.get("/api/calendario")
+        assert rv.status_code == 200
+        data = _json(rv)
+        assert data["ok"] is True
+        cal = data["calendario"]
+        assert isinstance(cal.get("sections"), list)
+        # El seed tiene 4 secciones y cubre la temporada día a día
+        # (partidos + Descanso tras cada partido + Entrenamiento el
+        # resto), así que el total es > 300. Sólo validamos orden de
+        # magnitud para que pequeños ajustes del seed no rompan el test.
+        assert len(cal["sections"]) == 4
+        total = sum(len(s["events"]) for s in cal["sections"])
+        assert total > 300
+
+    def test_add_edit_delete_require_admin(self, client):
+        """Sin login, los 3 POST de mutación devuelven 403."""
+        for path, body in [
+            ("/api/calendario/add", {"section_id": "verano-p1", "date": "X", "icon": "🤝", "name": "X", "weather": "☀️"}),
+            ("/api/calendario/edit", {"event_id": "ev-001", "date": "X", "icon": "🤝", "name": "X", "weather": "☀️"}),
+            ("/api/calendario/delete", {"event_id": "ev-001"}),
+        ]:
+            rv = client.post(path, json=body)
+            assert rv.status_code == 403, f"{path} debería requerir admin"
+
+    def test_add_event_generates_id_and_persists(self, client, tmp_path, monkeypatch):
+        """El add genera un id `ev-NNN` único y guarda el evento en
+        la sección indicada."""
+        # Redirige el archivo a un tmp para no manchar el del repo.
+        fake = tmp_path / "calendario.json"
+        fake.write_text(open(app_module.CALENDARIO_PATH).read(), encoding="utf-8")
+        monkeypatch.setattr(app_module, "CALENDARIO_PATH", str(fake))
+        self._login(client)
+        rv = client.post("/api/calendario/add", json={
+            "section_id": "verano-p1",
+            "date": "16 Jul",
+            "icon": "🤝",
+            "name": "Amistoso EXTRA",
+            "weather": "☀️",
+        })
+        assert rv.status_code == 200
+        j = _json(rv)
+        assert j["ok"] is True
+        assert j["event"]["id"].startswith("ev-")
+        assert j["event"]["name"] == "Amistoso EXTRA"
+        # El nuevo id no debe colisionar con uno existente.
+        cal = _json(client.get("/api/calendario"))["calendario"]
+        all_ids = [e["id"] for s in cal["sections"] for e in s["events"]]
+        assert len(all_ids) == len(set(all_ids))
+        # Y el evento se encuentra en verano-p1.
+        verano_events = next(s["events"] for s in cal["sections"] if s["id"] == "verano-p1")
+        assert any(e["name"] == "Amistoso EXTRA" for e in verano_events)
+
+    def test_add_rejects_missing_fields(self, client, tmp_path, monkeypatch):
+        fake = tmp_path / "calendario.json"
+        fake.write_text(open(app_module.CALENDARIO_PATH).read(), encoding="utf-8")
+        monkeypatch.setattr(app_module, "CALENDARIO_PATH", str(fake))
+        self._login(client)
+        # Falta `name`
+        rv = client.post("/api/calendario/add", json={
+            "section_id": "verano-p1", "date": "X", "icon": "🤝", "weather": "☀️"
+        })
+        assert rv.status_code == 400
+        assert _json(rv)["error"] == "falta nombre"
+
+    def test_add_rejects_unknown_section(self, client, tmp_path, monkeypatch):
+        fake = tmp_path / "calendario.json"
+        fake.write_text(open(app_module.CALENDARIO_PATH).read(), encoding="utf-8")
+        monkeypatch.setattr(app_module, "CALENDARIO_PATH", str(fake))
+        self._login(client)
+        rv = client.post("/api/calendario/add", json={
+            "section_id": "no-existe", "date": "X", "icon": "🤝",
+            "name": "Y", "weather": "☀️"
+        })
+        assert rv.status_code == 404
+
+    def test_edit_updates_fields_in_place(self, client, tmp_path, monkeypatch):
+        fake = tmp_path / "calendario.json"
+        fake.write_text(open(app_module.CALENDARIO_PATH).read(), encoding="utf-8")
+        monkeypatch.setattr(app_module, "CALENDARIO_PATH", str(fake))
+        self._login(client)
+        rv = client.post("/api/calendario/edit", json={
+            "event_id": "ev-001",
+            "date": "16 Jul",
+            "icon": "🤝",
+            "name": "Amistoso editado",
+            "weather": "🌧",
+        })
+        assert rv.status_code == 200
+        j = _json(rv)
+        assert j["event"]["name"] == "Amistoso editado"
+        assert j["event"]["weather"] == "🌧"
+        assert j["event"]["id"] == "ev-001"  # id conservado
+
+    def test_edit_rejects_unknown_event(self, client, tmp_path, monkeypatch):
+        fake = tmp_path / "calendario.json"
+        fake.write_text(open(app_module.CALENDARIO_PATH).read(), encoding="utf-8")
+        monkeypatch.setattr(app_module, "CALENDARIO_PATH", str(fake))
+        self._login(client)
+        rv = client.post("/api/calendario/edit", json={
+            "event_id": "ev-zzz",
+            "date": "X", "icon": "🤝", "name": "X", "weather": "☀️"
+        })
+        assert rv.status_code == 404
+
+    def test_delete_removes_event(self, client, tmp_path, monkeypatch):
+        fake = tmp_path / "calendario.json"
+        fake.write_text(open(app_module.CALENDARIO_PATH).read(), encoding="utf-8")
+        monkeypatch.setattr(app_module, "CALENDARIO_PATH", str(fake))
+        self._login(client)
+        rv = client.post("/api/calendario/delete", json={"event_id": "ev-005"})
+        assert rv.status_code == 200
+        assert _json(rv)["ok"] is True
+        # Ya no debe aparecer en el GET.
+        cal = _json(client.get("/api/calendario"))["calendario"]
+        all_ids = [e["id"] for s in cal["sections"] for e in s["events"]]
+        assert "ev-005" not in all_ids
+
+    def test_delete_rejects_unknown_event(self, client, tmp_path, monkeypatch):
+        fake = tmp_path / "calendario.json"
+        fake.write_text(open(app_module.CALENDARIO_PATH).read(), encoding="utf-8")
+        monkeypatch.setattr(app_module, "CALENDARIO_PATH", str(fake))
+        self._login(client)
+        rv = client.post("/api/calendario/delete", json={"event_id": "ev-zzz"})
+        assert rv.status_code == 404

@@ -18,11 +18,11 @@ window.TEAM_RATINGS = {
     },
     "PSG": {
         media: 84, color: "#0b1d48",
-        shield: "/static/img/escudos-1/france_paris-saint-germain.svg"
+        shield: "https://cdn.resfu.com/img_data/equipos/1924.png?size=120x&lossy=1"
     },
     "Paris Saint-Germain": {
         media: 84, color: "#0b1d48",
-        shield: "/static/img/escudos-1/france_paris-saint-germain.svg"
+        shield: "https://cdn.resfu.com/img_data/equipos/1924.png?size=120x&lossy=1"
     },
     "FC Barcelona": { 
         media: 85, color: "#004d98", 

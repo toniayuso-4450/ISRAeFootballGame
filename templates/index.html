@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>eFootball ✓</title>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@300;400;600;700&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/index.bundle.css') }}?v=5.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/index.bundle.css') }}?v=5.4">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/goal-notification-improved.css') }}?v=2.1">
   <style>
     /* ── HOME: todas las cards exactamente 80px, gap 15px ── */
@@ -40,6 +40,8 @@
     .nav-row .back-btn{margin:0!important;position:static!important;top:auto!important;z-index:auto!important;}
     .home-icon-btn{display:flex!important;align-items:center!important;justify-content:center!important;padding:7px 10px;text-decoration:none;font-size:15px;background:transparent;border:1px solid rgba(240,192,64,.22);border-radius:4px;color:rgba(255,255,255,.45);cursor:pointer;transition:all .16s;line-height:1;}
     .home-icon-btn:hover{color:var(--gold,#f0c040);border-color:var(--gold,#f0c040);}
+    /* ── Evitar auto-scroll del navegador durante simulaciones ── */
+    * { overflow-anchor: none !important; }
     /* ── BLOQUEO ABSOLUTO overlay central de gol ── */
     #mm-event-flash,#mm-event-flash.show,#mm-event-flash.mm-flash-gol,
     #mm-event-flash.mm-flash-roja,#mm-event-flash.mm-flash-gol.show,
@@ -63,11 +65,125 @@
 </head>
 <body>
 
+  <!-- ═══ BOOT SPLASH ════════════════════════════════════════════════
+       Petición usuario 2026-05-19: "al cargar la web emerge la pantalla
+       antigua y tarda unos segundos en mostrar la actual". Causa: la
+       app renderiza primero con datos de localStorage (que pueden ser
+       viejos de la sesión anterior) y luego un fetch a /api/liga-ext/*
+       / /api/kv/* actualiza el contenido → flash de DATOS viejos →
+       nuevos. Este splash CUBRE el contenido durante la ventana de
+       hidratación inicial (~1.8 s) y se desvanece. Tap para cerrar
+       antes (no atasca si el server tarda). Solo en la PRIMERA carga
+       del documento — las navegaciones internas (go()) no lo
+       muestran. ════════════════════════════════════════════════════ -->
+  <div id="boot-splash" aria-hidden="true">
+    <div class="boot-splash-logo">
+      <span class="boot-splash-11">ISRA -</span>
+      <span class="boot-splash-title">Efootball</span>
+    </div>
+    <div class="boot-splash-spinner"></div>
+    <div class="boot-splash-hint">Cargando…</div>
+  </div>
+  <style>
+    #boot-splash{
+      position:fixed;inset:0;z-index:2147483646;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;
+      background:radial-gradient(ellipse at center,#0a0f1c 0%,#04060e 70%,#000 100%);
+      transition:opacity .35s ease;
+      cursor:pointer;
+      -webkit-tap-highlight-color:transparent;
+    }
+    #boot-splash.hide{opacity:0;pointer-events:none;}
+    .boot-splash-logo{display:flex;align-items:baseline;gap:10px;}
+    .boot-splash-11{
+      font-family:'Bebas Neue',Oswald,sans-serif;font-size:48px;font-weight:900;
+      color:#ff4444;text-shadow:0 0 16px rgba(255,60,60,.6),0 0 32px rgba(255,60,60,.35);
+      letter-spacing:1px;
+    }
+    .boot-splash-title{
+      font-family:'Bebas Neue',Oswald,sans-serif;font-size:36px;font-weight:700;
+      color:#f0c040;letter-spacing:6px;text-shadow:0 0 18px rgba(240,192,64,.55);
+    }
+    .boot-splash-spinner{
+      width:38px;height:38px;border-radius:50%;
+      border:3px solid rgba(240,192,64,.18);
+      border-top-color:#f0c040;
+      animation:bootSplashSpin .9s linear infinite;
+    }
+    @keyframes bootSplashSpin{to{transform:rotate(360deg);}}
+    .boot-splash-hint{
+      font-family:Oswald,sans-serif;font-size:11px;letter-spacing:3px;
+      color:rgba(255,255,255,.45);text-transform:uppercase;
+    }
+  </style>
+  <script>
+    /* Splash auto-hide RÁPIDO atado a DOMContentLoaded (NO a
+       window.load). 2026-05-21 — el usuario reportó que la web
+       tardaba 45+ s en abrir (antes <5 s).
+
+       Causa: el commit 1dd5623 ató el splash a `window.load`, que
+       NO dispara hasta que el navegador descarga TODOS los assets
+       (cientos de escudos PNG/SVG). En móvil eso son 45+ s — la
+       "barra azul" del browser no se completa hasta entonces.
+
+       window.load ≠ "app hidratada". La app está USABLE en
+       DOMContentLoaded: el HTML está parseado y el bundle
+       (index.bundle.js, script bloqueante) ya ha ejecutado, así que
+       el render inicial + el arranque de los fetches de hidratación
+       (/api/liga-ext/*, /api/kv/*) ya ocurrieron. Los escudos
+       siguen bajando en segundo plano SIN bloquear nada.
+
+       Flujo:
+       - hide() se programa en DOMContentLoaded + GRACE_MS. El grace
+         da un margen a que los fetches de hidratación más rápidos
+         (cache-hit / server caliente) re-rendericen antes de quitar
+         la cortina.
+       - Caps: MIN 1200 ms (no flashear ultra rápido) y MAX 8000 ms
+         (backstop si el bundle tarda mucho en parsear — nunca dejar
+         al usuario clavado).
+       - Tap/click cierra antes. */
+    (function(){
+      var MIN_MS   = (typeof window._BOOT_SPLASH_MIN_MS   === 'number') ? window._BOOT_SPLASH_MIN_MS   : 1200;
+      var GRACE_MS = (typeof window._BOOT_SPLASH_GRACE_MS === 'number') ? window._BOOT_SPLASH_GRACE_MS :  700;
+      var MAX_MS   = (typeof window._BOOT_SPLASH_MAX_MS   === 'number') ? window._BOOT_SPLASH_MAX_MS   : 8000;
+      var el = document.getElementById('boot-splash');
+      if (!el) return;
+      var hidden = false;
+      var startedAt = Date.now();
+      function hide(){
+        if (hidden) return;
+        var elapsed = Date.now() - startedAt;
+        if (elapsed < MIN_MS) { setTimeout(hide, MIN_MS - elapsed); return; }
+        hidden = true;
+        el.classList.add('hide');
+        setTimeout(function(){ if (el && el.parentNode) el.parentNode.removeChild(el); }, 380);
+      }
+      /* Tap-to-close (no atascar al usuario si la red va muy lenta). */
+      el.addEventListener('click', hide, { once:true });
+      el.addEventListener('touchend', hide, { once:true });
+
+      /* Trigger principal: DOMContentLoaded + GRACE_MS (app usable,
+         el bundle ya ejecutó). NO window.load — eso espera a TODOS
+         los escudos y dispara los 45 s. */
+      function _scheduleAfterReady(){ setTimeout(hide, GRACE_MS); }
+      if (document.readyState === 'interactive' || document.readyState === 'complete') {
+        _scheduleAfterReady();
+      } else {
+        document.addEventListener('DOMContentLoaded', _scheduleAfterReady, { once:true });
+      }
+      /* Backstop absoluto. */
+      setTimeout(hide, MAX_MS);
+      /* Hook por si un flujo crítico (ej. partido live restaurándose
+         del wprev_state_v1) quiere ocultarlo antes via _bootSplashHide(). */
+      window._bootSplashHide = hide;
+    })();
+  </script>
+
   {% include 'partials/misc_body_1.html' %}
   {% include 'partials/part2/misc_body_2.html' %}
   <script src="{{ url_for('static', filename='js/goal-notification-improved.js') }}?v=2.0"></script>
   <script src="{{ url_for('static', filename='js/var-system.js') }}?v=1.0"></script>
-  <script src="{{ url_for('static', filename='js/index.bundle.js') }}?v=5.0"></script>
+  <script src="{{ url_for('static', filename='js/index.bundle.js') }}?v=9.8"></script>
   <script>
   /* ── PARCHE INLINE: bloquea el overlay central de gol ──────────────────
      Corre inmediatamente después del bundle, sin depender de archivos
@@ -146,13 +262,8 @@
     new MutationObserver(purgeGooool).observe(document.body,{childList:true,subtree:true});
   })();
   </script>
-  <button id="audio-mute-btn"
-          data-muted="false"
-          aria-label="Sonido activado – clic para silenciar"
-          aria-pressed="false"
-          title="Sonido activado – clic para silenciar">🔊</button>
   <script src="{{ url_for('static', filename='js/goal-notification-patch.js') }}?v=2.1"></script>
-  <script src="{{ url_for('static', filename='js/copa-engine.js') }}?v=1.0"></script>
+  <script src="{{ url_for('static', filename='js/copa-engine.js') }}?v=1.1"></script>
   <script src="{{ url_for('static', filename='js/primera-rfef-data.js') }}?v=1.1"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function(){

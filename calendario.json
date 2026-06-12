@@ -1,0 +1,2594 @@
+{
+  "version": 6,
+  "_normalized_v": 6,
+  "season": "32-33",
+  "sections": [
+    {
+      "id": "preverano",
+      "name": "PRE-VERANO",
+      "icon": "🌍",
+      "variant": "preverano",
+      "events": [
+        {
+          "id": "ev-001",
+          "date": "01 May",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-002",
+          "date": "02 May",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-003",
+          "date": "03 May",
+          "icon": "🌍",
+          "name": "Mundial Grupo — J1",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-004",
+          "date": "04 May",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-005",
+          "date": "05 May",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-006",
+          "date": "06 May",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-007",
+          "date": "07 May",
+          "icon": "🌍",
+          "name": "Mundial Grupo — J2",
+          "weather": "🌧"
+        },
+        {
+          "id": "ev-008",
+          "date": "08 May",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-009",
+          "date": "09 May",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-010",
+          "date": "10 May",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-011",
+          "date": "11 May",
+          "icon": "🌍",
+          "name": "Mundial Grupo — J3",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-012",
+          "date": "12 May",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-013",
+          "date": "13 May",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-014",
+          "date": "14 May",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-015",
+          "date": "15 May",
+          "icon": "🌍",
+          "name": "Mundial - Dieciseisavos",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-016",
+          "date": "16 May",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-017",
+          "date": "17 May",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-018",
+          "date": "18 May",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-019",
+          "date": "19 May",
+          "icon": "🌍",
+          "name": "Mundial Octavos",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-020",
+          "date": "20 May",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-021",
+          "date": "21 May",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-022",
+          "date": "22 May",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-023",
+          "date": "23 May",
+          "icon": "🌍",
+          "name": "Mundial Cuartos",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-024",
+          "date": "24 May",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-025",
+          "date": "25 May",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-026",
+          "date": "26 May",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-027",
+          "date": "27 May",
+          "icon": "🌍",
+          "name": "Mundial Semis",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-028",
+          "date": "28 May",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-029",
+          "date": "29 May",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-030",
+          "date": "30 May",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-031",
+          "date": "31 May",
+          "icon": "🌍",
+          "name": "MUNDIAL GRAN FINAL 🏆",
+          "weather": "☀️"
+        }
+      ]
+    },
+    {
+      "id": "verano-p1",
+      "name": "VERANO · PARTE 1",
+      "icon": "☀️",
+      "variant": "verano",
+      "events": [
+        {
+          "id": "ev-032",
+          "date": "01 Jun",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-033",
+          "date": "02 Jun",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-034",
+          "date": "03 Jun",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-035",
+          "date": "04 Jun",
+          "icon": "🌞",
+          "name": "Torneo Verano - Partido 1",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-036",
+          "date": "05 Jun",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-037",
+          "date": "06 Jun",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-038",
+          "date": "07 Jun",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-039",
+          "date": "08 Jun",
+          "icon": "🌞",
+          "name": "Torneo Verano - Partido 2",
+          "weather": "🌧"
+        },
+        {
+          "id": "ev-040",
+          "date": "09 Jun",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-041",
+          "date": "10 Jun",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-042",
+          "date": "11 Jun",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-043",
+          "date": "12 Jun",
+          "icon": "🌞",
+          "name": "Torneo Verano - Partido 3",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-044",
+          "date": "13 Jun",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-045",
+          "date": "14 Jun",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-046",
+          "date": "15 Jun",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-047",
+          "date": "16 Jun",
+          "icon": "🌞",
+          "name": "Torneo Verano - Partido 4",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-048",
+          "date": "17 Jun",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-049",
+          "date": "18 Jun",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-050",
+          "date": "19 Jun",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-051",
+          "date": "20 Jun",
+          "icon": "🌞",
+          "name": "Torneo Verano - Partido 5",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-052",
+          "date": "21 Jun",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-053",
+          "date": "22 Jun",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-054",
+          "date": "23 Jun",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-055",
+          "date": "24 Jun",
+          "icon": "🌞",
+          "name": "Torneo Verano - Partido 6",
+          "weather": "🌧"
+        },
+        {
+          "id": "ev-056",
+          "date": "25 Jun",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-057",
+          "date": "26 Jun",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-058",
+          "date": "27 Jun",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-059",
+          "date": "28 Jun",
+          "icon": "🌞",
+          "name": "Torneo Verano - Partido 7",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-060",
+          "date": "29 Jun",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-061",
+          "date": "30 Jun",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-062",
+          "date": "01 Jul",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-063",
+          "date": "02 Jul",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-064",
+          "date": "03 Jul",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-065",
+          "date": "04 Jul",
+          "icon": "🌐",
+          "name": "Mundialito Clubes - J1",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-066",
+          "date": "05 Jul",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-067",
+          "date": "06 Jul",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-068",
+          "date": "07 Jul",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-069",
+          "date": "08 Jul",
+          "icon": "🌐",
+          "name": "Mundialito Clubes - J2",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-070",
+          "date": "09 Jul",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-071",
+          "date": "10 Jul",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-072",
+          "date": "11 Jul",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-073",
+          "date": "12 Jul",
+          "icon": "🌐",
+          "name": "Mundialito Clubes - J3",
+          "weather": "🌧"
+        },
+        {
+          "id": "ev-074",
+          "date": "13 Jul",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-075",
+          "date": "14 Jul",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-076",
+          "date": "15 Jul",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-077",
+          "date": "16 Jul",
+          "icon": "🌐",
+          "name": "Mundialito Clubes - Octavos",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-078",
+          "date": "17 Jul",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-079",
+          "date": "18 Jul",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-080",
+          "date": "19 Jul",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-081",
+          "date": "20 Jul",
+          "icon": "🌐",
+          "name": "Mundialito Clubes - Cuartos",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-082",
+          "date": "21 Jul",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-083",
+          "date": "22 Jul",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-084",
+          "date": "23 Jul",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-085",
+          "date": "24 Jul",
+          "icon": "🌐",
+          "name": "Mundialito Clubes - Semis",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-086",
+          "date": "25 Jul",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-087",
+          "date": "26 Jul",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-088",
+          "date": "27 Jul",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-089",
+          "date": "28 Jul",
+          "icon": "🌐",
+          "name": "Mundialito Clubes - FINAL",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-090",
+          "date": "29 Jul",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-091",
+          "date": "30 Jul",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-092",
+          "date": "31 Jul",
+          "icon": "🔵",
+          "name": "Previa Champions — J1",
+          "weather": "🌧"
+        },
+        {
+          "id": "ev-093",
+          "date": "01 Ago",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-094",
+          "date": "02 Ago",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-095",
+          "date": "03 Ago",
+          "icon": "🔵",
+          "name": "Previa Champions — J2",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-096",
+          "date": "04 Ago",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-097",
+          "date": "05 Ago",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-098",
+          "date": "06 Ago",
+          "icon": "⚽",
+          "name": "Liga — J1",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-099",
+          "date": "07 Ago",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-100",
+          "date": "08 Ago",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-101",
+          "date": "09 Ago",
+          "icon": "🔵",
+          "name": "Previa Champions — J3",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-102",
+          "date": "10 Ago",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-103",
+          "date": "11 Ago",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-104",
+          "date": "12 Ago",
+          "icon": "⚽",
+          "name": "Liga — J2",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-105",
+          "date": "13 Ago",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-106",
+          "date": "14 Ago",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-107",
+          "date": "15 Ago",
+          "icon": "🔵",
+          "name": "Previa Champions — J4",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-108",
+          "date": "16 Ago",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-109",
+          "date": "17 Ago",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-110",
+          "date": "18 Ago",
+          "icon": "⚽",
+          "name": "Liga — J3",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-111",
+          "date": "19 Ago",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-112",
+          "date": "20 Ago",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-113",
+          "date": "21 Ago",
+          "icon": "🌍",
+          "name": "Selecciones — J1",
+          "weather": "🌧"
+        },
+        {
+          "id": "ev-114",
+          "date": "22 Ago",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-115",
+          "date": "23 Ago",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-116",
+          "date": "24 Ago",
+          "icon": "🌍",
+          "name": "Selecciones — J2",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-117",
+          "date": "25 Ago",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-118",
+          "date": "26 Ago",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-119",
+          "date": "27 Ago",
+          "icon": "⚽",
+          "name": "Liga — J4",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-120",
+          "date": "28 Ago",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-121",
+          "date": "29 Ago",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-122",
+          "date": "30 Ago",
+          "icon": "🔴",
+          "name": "Recopa Europa — 1/64",
+          "weather": "🌧"
+        },
+        {
+          "id": "ev-123",
+          "date": "31 Ago",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-124",
+          "date": "01 Sep",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-125",
+          "date": "02 Sep",
+          "icon": "⚽",
+          "name": "Liga — J5",
+          "weather": "🌧"
+        },
+        {
+          "id": "ev-126",
+          "date": "03 Sep",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-127",
+          "date": "04 Sep",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-128",
+          "date": "05 Sep",
+          "icon": "🇪🇺",
+          "name": "Europa — Grupo J1",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-129",
+          "date": "06 Sep",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-130",
+          "date": "07 Sep",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-131",
+          "date": "08 Sep",
+          "icon": "⚽",
+          "name": "Liga — J6",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-132",
+          "date": "09 Sep",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-133",
+          "date": "10 Sep",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-134",
+          "date": "11 Sep",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-135",
+          "date": "12 Sep",
+          "icon": "🏆",
+          "name": "Copa del Rey — 1/128",
+          "weather": "🌧"
+        },
+        {
+          "id": "ev-136",
+          "date": "13 Sep",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-137",
+          "date": "14 Sep",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-138",
+          "date": "15 Sep",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-139",
+          "date": "16 Sep",
+          "icon": "⚽",
+          "name": "Liga — J7",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-140",
+          "date": "17 Sep",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-141",
+          "date": "18 Sep",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-142",
+          "date": "19 Sep",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-143",
+          "date": "20 Sep",
+          "icon": "⚽",
+          "name": "Liga — J8",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-144",
+          "date": "21 Sep",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        }
+      ]
+    },
+    {
+      "id": "invierno",
+      "name": "INVIERNO",
+      "icon": "❄️",
+      "variant": "invierno",
+      "events": [
+        {
+          "id": "ev-145",
+          "date": "22 Sep",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-146",
+          "date": "23 Sep",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-147",
+          "date": "24 Sep",
+          "icon": "🏆",
+          "name": "Copa del Rey — 1/64",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-148",
+          "date": "25 Sep",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-149",
+          "date": "26 Sep",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-150",
+          "date": "27 Sep",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-151",
+          "date": "28 Sep",
+          "icon": "⚽",
+          "name": "Liga — J9",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-152",
+          "date": "29 Sep",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-153",
+          "date": "30 Sep",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-154",
+          "date": "01 Oct",
+          "icon": "🌍",
+          "name": "Selecciones — J3",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-155",
+          "date": "02 Oct",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-156",
+          "date": "03 Oct",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-157",
+          "date": "04 Oct",
+          "icon": "🌍",
+          "name": "Selecciones — J4",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-158",
+          "date": "05 Oct",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-159",
+          "date": "06 Oct",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-160",
+          "date": "07 Oct",
+          "icon": "⚽",
+          "name": "Liga — J10",
+          "weather": "🌧"
+        },
+        {
+          "id": "ev-161",
+          "date": "08 Oct",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-162",
+          "date": "09 Oct",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-163",
+          "date": "10 Oct",
+          "icon": "🇪🇺",
+          "name": "Europa — Grupo J2",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-164",
+          "date": "11 Oct",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-165",
+          "date": "12 Oct",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-166",
+          "date": "13 Oct",
+          "icon": "⚽",
+          "name": "Liga — J11",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-167",
+          "date": "14 Oct",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-168",
+          "date": "15 Oct",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-169",
+          "date": "16 Oct",
+          "icon": "🔴",
+          "name": "Recopa Europa — 1/32",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-170",
+          "date": "17 Oct",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-171",
+          "date": "18 Oct",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-172",
+          "date": "19 Oct",
+          "icon": "⚽",
+          "name": "Liga — J12",
+          "weather": "🌧"
+        },
+        {
+          "id": "ev-173",
+          "date": "20 Oct",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-174",
+          "date": "21 Oct",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-175",
+          "date": "22 Oct",
+          "icon": "🇪🇺",
+          "name": "Europa — Grupo J3",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-176",
+          "date": "23 Oct",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-177",
+          "date": "24 Oct",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-178",
+          "date": "25 Oct",
+          "icon": "⚽",
+          "name": "Liga — J13",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-179",
+          "date": "26 Oct",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-180",
+          "date": "27 Oct",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-181",
+          "date": "28 Oct",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-182",
+          "date": "29 Oct",
+          "icon": "🏆",
+          "name": "Copa del Rey — 1/32",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-183",
+          "date": "30 Oct",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-184",
+          "date": "31 Oct",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-185",
+          "date": "01 Nov",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-186",
+          "date": "02 Nov",
+          "icon": "⚽",
+          "name": "Liga — J14",
+          "weather": "🌧"
+        },
+        {
+          "id": "ev-187",
+          "date": "03 Nov",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-188",
+          "date": "04 Nov",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-189",
+          "date": "05 Nov",
+          "icon": "🌍",
+          "name": "Selecciones — J5",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-190",
+          "date": "06 Nov",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-191",
+          "date": "07 Nov",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-192",
+          "date": "08 Nov",
+          "icon": "🌍",
+          "name": "Selecciones — J6",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-193",
+          "date": "09 Nov",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-194",
+          "date": "10 Nov",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-195",
+          "date": "11 Nov",
+          "icon": "⚽",
+          "name": "Liga — J15",
+          "weather": "🌧"
+        },
+        {
+          "id": "ev-196",
+          "date": "12 Nov",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-197",
+          "date": "13 Nov",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-198",
+          "date": "14 Nov",
+          "icon": "🇪🇺",
+          "name": "Europa — Grupo J4",
+          "weather": "🌧"
+        },
+        {
+          "id": "ev-199",
+          "date": "15 Nov",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-200",
+          "date": "16 Nov",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-201",
+          "date": "17 Nov",
+          "icon": "⚽",
+          "name": "Liga — J16",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-202",
+          "date": "18 Nov",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-203",
+          "date": "19 Nov",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-204",
+          "date": "20 Nov",
+          "icon": "⚽",
+          "name": "Liga — J17",
+          "weather": "❄️"
+        },
+        {
+          "id": "ev-205",
+          "date": "21 Nov",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-206",
+          "date": "22 Nov",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-207",
+          "date": "23 Nov",
+          "icon": "🇪🇺",
+          "name": "Europa — Grupo J5",
+          "weather": "🌧"
+        },
+        {
+          "id": "ev-208",
+          "date": "24 Nov",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-209",
+          "date": "25 Nov",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-210",
+          "date": "26 Nov",
+          "icon": "⚽",
+          "name": "Liga — J18",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-211",
+          "date": "27 Nov",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-212",
+          "date": "28 Nov",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-213",
+          "date": "29 Nov",
+          "icon": "🔴",
+          "name": "Recopa Europa — Octavos",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-214",
+          "date": "30 Nov",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-215",
+          "date": "01 Dic",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-216",
+          "date": "02 Dic",
+          "icon": "🟡",
+          "name": "Intercontinental — Cuartos (Asia)",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-217",
+          "date": "03 Dic",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-218",
+          "date": "04 Dic",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-219",
+          "date": "05 Dic",
+          "icon": "🟡",
+          "name": "Intercontinental — Semis (Asia)",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-220",
+          "date": "06 Dic",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-221",
+          "date": "07 Dic",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-222",
+          "date": "08 Dic",
+          "icon": "🟡",
+          "name": "INTERCONTINENTAL FINAL (Asia)",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-223",
+          "date": "09 Dic",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-224",
+          "date": "10 Dic",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-225",
+          "date": "11 Dic",
+          "icon": "⚽",
+          "name": "Liga — J19",
+          "weather": "❄️"
+        },
+        {
+          "id": "ev-226",
+          "date": "12 Dic",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-227",
+          "date": "13 Dic",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-228",
+          "date": "14 Dic",
+          "icon": "🇪🇺",
+          "name": "Europa — Grupo J6",
+          "weather": "🌧"
+        },
+        {
+          "id": "ev-229",
+          "date": "15 Dic",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-230",
+          "date": "16 Dic",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-231",
+          "date": "17 Dic",
+          "icon": "⚽",
+          "name": "Liga — J20",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-232",
+          "date": "18 Dic",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-233",
+          "date": "19 Dic",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-234",
+          "date": "20 Dic",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-235",
+          "date": "21 Dic",
+          "icon": "🏆",
+          "name": "Copa del Rey — Octavos Ida",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-236",
+          "date": "22 Dic",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-237",
+          "date": "23 Dic",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-238",
+          "date": "24 Dic",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-239",
+          "date": "25 Dic",
+          "icon": "⚽",
+          "name": "Liga — J21",
+          "weather": "🌧"
+        },
+        {
+          "id": "ev-240",
+          "date": "26 Dic",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-241",
+          "date": "27 Dic",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-242",
+          "date": "28 Dic",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-243",
+          "date": "29 Dic",
+          "icon": "🏆",
+          "name": "Copa del Rey — Octavos Vuelta",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-244",
+          "date": "30 Dic",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-245",
+          "date": "31 Dic",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-246",
+          "date": "01 Ene",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-247",
+          "date": "02 Ene",
+          "icon": "⚽",
+          "name": "Liga — J22",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-248",
+          "date": "03 Ene",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-249",
+          "date": "04 Ene",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-250",
+          "date": "05 Ene",
+          "icon": "🇪🇺",
+          "name": "Europa — Grupo J7",
+          "weather": "🌧"
+        },
+        {
+          "id": "ev-251",
+          "date": "06 Ene",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-252",
+          "date": "07 Ene",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-253",
+          "date": "08 Ene",
+          "icon": "⚽",
+          "name": "Liga — J23",
+          "weather": "❄️"
+        },
+        {
+          "id": "ev-254",
+          "date": "09 Ene",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-255",
+          "date": "10 Ene",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-256",
+          "date": "11 Ene",
+          "icon": "🇪🇺",
+          "name": "Europa — Grupo J8",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-257",
+          "date": "12 Ene",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-258",
+          "date": "13 Ene",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-259",
+          "date": "14 Ene",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-260",
+          "date": "15 Ene",
+          "icon": "⚽",
+          "name": "Liga — J24",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-261",
+          "date": "16 Ene",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-262",
+          "date": "17 Ene",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-263",
+          "date": "18 Ene",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-264",
+          "date": "19 Ene",
+          "icon": "⚽",
+          "name": "Liga — J25",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-265",
+          "date": "20 Ene",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-266",
+          "date": "21 Ene",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-267",
+          "date": "22 Ene",
+          "icon": "🇪🇺",
+          "name": "Europa — Repesca Ida",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-268",
+          "date": "23 Ene",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-269",
+          "date": "24 Ene",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-270",
+          "date": "25 Ene",
+          "icon": "⚽",
+          "name": "Liga — J26",
+          "weather": "🌧"
+        },
+        {
+          "id": "ev-271",
+          "date": "26 Ene",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-272",
+          "date": "27 Ene",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-273",
+          "date": "28 Ene",
+          "icon": "🇪🇺",
+          "name": "Europa — Repesca Vuelta",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-274",
+          "date": "29 Ene",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-275",
+          "date": "30 Ene",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-276",
+          "date": "31 Ene",
+          "icon": "🔴",
+          "name": "Recopa Europa — Cuartos",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-277",
+          "date": "01 Feb",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-278",
+          "date": "02 Feb",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-279",
+          "date": "03 Feb",
+          "icon": "⚽",
+          "name": "Liga — J27",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-280",
+          "date": "04 Feb",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-281",
+          "date": "05 Feb",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-282",
+          "date": "06 Feb",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-283",
+          "date": "07 Feb",
+          "icon": "🏆",
+          "name": "Copa del Rey — Cuartos Ida",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-284",
+          "date": "08 Feb",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-285",
+          "date": "09 Feb",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-286",
+          "date": "10 Feb",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-287",
+          "date": "11 Feb",
+          "icon": "⚽",
+          "name": "Liga — J28",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-288",
+          "date": "12 Feb",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-289",
+          "date": "13 Feb",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-290",
+          "date": "14 Feb",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-291",
+          "date": "15 Feb",
+          "icon": "🏆",
+          "name": "Copa del Rey — Cuartos Vuelta",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-292",
+          "date": "16 Feb",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-293",
+          "date": "17 Feb",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-294",
+          "date": "18 Feb",
+          "icon": "🌍",
+          "name": "Selecciones — J7",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-295",
+          "date": "19 Feb",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-296",
+          "date": "20 Feb",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-297",
+          "date": "21 Feb",
+          "icon": "🌍",
+          "name": "Selecciones — J8",
+          "weather": "☀️"
+        }
+      ]
+    },
+    {
+      "id": "verano-p2",
+      "name": "VERANO · PARTE 2",
+      "icon": "☀️",
+      "variant": "verano",
+      "events": [
+        {
+          "id": "ev-298",
+          "date": "22 Feb",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-299",
+          "date": "23 Feb",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-300",
+          "date": "24 Feb",
+          "icon": "⚽",
+          "name": "Liga — J29",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-301",
+          "date": "25 Feb",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-302",
+          "date": "26 Feb",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-303",
+          "date": "27 Feb",
+          "icon": "🇪🇺",
+          "name": "Europa — Octavos Ida",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-304",
+          "date": "28 Feb",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-305",
+          "date": "01 Mar",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-306",
+          "date": "02 Mar",
+          "icon": "⚽",
+          "name": "Liga — J30",
+          "weather": "🌧"
+        },
+        {
+          "id": "ev-307",
+          "date": "03 Mar",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-308",
+          "date": "04 Mar",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-309",
+          "date": "05 Mar",
+          "icon": "🇪🇺",
+          "name": "Europa — Octavos Vuelta",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-310",
+          "date": "06 Mar",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-311",
+          "date": "07 Mar",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-312",
+          "date": "08 Mar",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-313",
+          "date": "09 Mar",
+          "icon": "⚽",
+          "name": "Liga — J31",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-314",
+          "date": "10 Mar",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-315",
+          "date": "11 Mar",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-316",
+          "date": "12 Mar",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-317",
+          "date": "13 Mar",
+          "icon": "🏆",
+          "name": "Copa del Rey — Semis Ida",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-318",
+          "date": "14 Mar",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-319",
+          "date": "15 Mar",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-320",
+          "date": "16 Mar",
+          "icon": "⚽",
+          "name": "Liga — J32",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-321",
+          "date": "17 Mar",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-322",
+          "date": "18 Mar",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-323",
+          "date": "19 Mar",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-324",
+          "date": "20 Mar",
+          "icon": "🏆",
+          "name": "Copa del Rey — Semis Vuelta",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-325",
+          "date": "21 Mar",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-326",
+          "date": "22 Mar",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-327",
+          "date": "23 Mar",
+          "icon": "⚽",
+          "name": "Liga — J33",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-328",
+          "date": "24 Mar",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-329",
+          "date": "25 Mar",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-330",
+          "date": "26 Mar",
+          "icon": "🇪🇺",
+          "name": "Europa — Cuartos Ida",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-331",
+          "date": "27 Mar",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-332",
+          "date": "28 Mar",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-333",
+          "date": "29 Mar",
+          "icon": "⚽",
+          "name": "Liga — J34",
+          "weather": "🌧"
+        },
+        {
+          "id": "ev-334",
+          "date": "30 Mar",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-335",
+          "date": "31 Mar",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-336",
+          "date": "01 Abr",
+          "icon": "🇪🇺",
+          "name": "Europa — Cuartos Vuelta",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-337",
+          "date": "02 Abr",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-338",
+          "date": "03 Abr",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-339",
+          "date": "04 Abr",
+          "icon": "⚽",
+          "name": "Liga — J35",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-340",
+          "date": "05 Abr",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-341",
+          "date": "06 Abr",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-342",
+          "date": "07 Abr",
+          "icon": "🔴",
+          "name": "Recopa Europa — Semis",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-343",
+          "date": "08 Abr",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-344",
+          "date": "09 Abr",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-345",
+          "date": "10 Abr",
+          "icon": "🇪🇺",
+          "name": "Europa — Semis Ida",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-346",
+          "date": "11 Abr",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-347",
+          "date": "12 Abr",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-348",
+          "date": "13 Abr",
+          "icon": "⚽",
+          "name": "Liga — J36",
+          "weather": "🌧"
+        },
+        {
+          "id": "ev-349",
+          "date": "14 Abr",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-350",
+          "date": "15 Abr",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-351",
+          "date": "16 Abr",
+          "icon": "🇪🇺",
+          "name": "Europa — Semis Vuelta",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-352",
+          "date": "17 Abr",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-353",
+          "date": "18 Abr",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-354",
+          "date": "19 Abr",
+          "icon": "⚽",
+          "name": "Liga — J37",
+          "weather": "🌧"
+        },
+        {
+          "id": "ev-355",
+          "date": "20 Abr",
+          "icon": "💤",
+          "name": "Descanso",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-356",
+          "date": "21 Abr",
+          "icon": "🏃",
+          "name": "Entrenamiento",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-357",
+          "date": "22 Abr",
+          "icon": "⚽",
+          "name": "Liga — J38",
+          "weather": "🌧"
+        },
+        {
+          "id": "ev-358",
+          "date": "23 Abr",
+          "icon": "🔴",
+          "name": "FINAL RECOPA",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-359",
+          "date": "24 Abr",
+          "icon": "🏆",
+          "name": "FINAL COPA DEL REY",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-360",
+          "date": "25 Abr",
+          "icon": "🇪🇺",
+          "name": "FINALES EUROPA 🏆",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-361",
+          "date": "26 Abr",
+          "icon": "🏆",
+          "name": "Supercopa España — Semis",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-362",
+          "date": "27 Abr",
+          "icon": "🏆",
+          "name": "SUPERCOPA ESPAÑA — FINAL",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-363",
+          "date": "28 Abr",
+          "icon": "⚫️",
+          "name": "Semis Supercup 🏆",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-364",
+          "date": "29 Abr",
+          "icon": "⚫️",
+          "name": "FINAL SUPERCUP 🏆",
+          "weather": "☀️"
+        },
+        {
+          "id": "ev-365",
+          "date": "30 Abr",
+          "icon": "🏁",
+          "name": "FIN TEMPORADA",
+          "weather": "☀️"
+        }
+      ]
+    }
+  ]
+}

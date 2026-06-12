@@ -1,5 +1,417 @@
 <div class="screen" id="s-superliga-clas">
-<button class="back-btn" onclick="go('s-superliga')">◀ Volver</button>
-<div class="sec-hdr"><span class="sec-emoji">📊</span><h2>Superliga · Clasificación</h2></div>
-<div class="empty-ph">Clasificación — próximamente</div>
+<button class="back-btn" onclick="go('s-competiciones')">◀ Volver</button>
+<div class="sec-hdr"><span class="sec-emoji">⭐</span><h2>Superliga · Clasificación</h2></div>
+<style>
+#s-superliga-clas .clas-wrap{padding:0 0 32px;}
+#s-superliga-clas .clas-scroll-outer{position:relative;}
+#s-superliga-clas .clas-hdr-scroll{overflow:hidden;position:sticky;top:44px;z-index:20;}
+#s-superliga-clas .clas-scroll{overflow-x:auto;padding-top:6px;}
+#s-superliga-clas .clas-table{width:100%;display:flex;flex-direction:column;gap:0;min-width:500px;}
+#s-superliga-clas .clas-hdr,
+#s-superliga-clas .clas-row{display:grid;grid-template-columns:minmax(120px,1.4fr) 36px 28px 24px 24px 24px 28px 28px 30px 32px 34px 72px;gap:2px;align-items:center;}
+#s-superliga-clas .clas-hdr{padding:8px 6px 8px 0;background:linear-gradient(90deg,#1c0f30,#3d1a66);border-bottom:2px solid rgba(168,85,247,.55);font-family:Oswald,sans-serif;font-size:9px;letter-spacing:1px;color:rgba(255,255,255,.62);font-weight:700;text-align:center;}
+#s-superliga-clas .clas-hdr-team{position:sticky;left:0;z-index:21;background:linear-gradient(90deg,#1c0f30,#3d1a66);padding:8px 6px;text-align:left;color:rgba(255,255,255,.92);font-family:Oswald,sans-serif;font-size:9px;letter-spacing:1px;font-weight:700;}
+#s-superliga-clas .clas-row{padding:6px 6px 6px 0;border-bottom:1px solid rgba(255,255,255,.05);transition:background .12s;border-left:3px solid transparent;}
+#s-superliga-clas .clas-row:hover{filter:brightness(1.15);}
+#s-superliga-clas .clas-row.zone-champ{background:rgba(240,192,64,.12);border-left-color:#f0c040;}
+#s-superliga-clas .clas-row.zone-top{background:rgba(168,85,247,.12);border-left-color:#a855f7;}
+#s-superliga-clas .clas-row.zone-bot{background:rgba(224,60,60,.12);border-left-color:#e03c3c;}
+#s-superliga-clas .clas-team-cell{position:sticky;left:0;z-index:5;display:flex;align-items:center;gap:4px;padding:0 4px;background:#0a0414;}
+#s-superliga-clas .clas-row.zone-champ .clas-team-cell{background:#1a1300;}
+#s-superliga-clas .clas-row.zone-top .clas-team-cell{background:#15082a;}
+#s-superliga-clas .clas-row.zone-bot .clas-team-cell{background:#180606;}
+#s-superliga-clas .clas-pos-n{font-family:"Bebas Neue",sans-serif;font-size:15px;color:rgba(255,255,255,.45);min-width:16px;text-align:center;flex-shrink:0;}
+#s-superliga-clas .zone-champ .clas-pos-n{color:#f0c040;}
+#s-superliga-clas .zone-top .clas-pos-n{color:#c89bff;}
+#s-superliga-clas .zone-bot .clas-pos-n{color:#ff7070;}
+#s-superliga-clas .clas-team-name{font-family:Rajdhani,sans-serif;font-size:12px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:5px;}
+#s-superliga-clas .clas-team-shield{width:18px;height:18px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 2px rgba(0,0,0,.55));}
+#s-superliga-clas .clas-pct{font-family:"Bebas Neue",sans-serif;font-size:14px;color:#c0a0ff;text-align:center;}
+#s-superliga-clas .clas-pts{font-family:"Bebas Neue",sans-serif;font-size:18px;color:#f0c040;text-align:center;font-weight:700;}
+#s-superliga-clas .clas-pj,
+#s-superliga-clas .clas-val{font-family:"Bebas Neue",sans-serif;font-size:15px;color:rgba(255,255,255,.78);text-align:center;}
+#s-superliga-clas .clas-val.gf{color:#80d0ff;}
+#s-superliga-clas .clas-val.gc{color:#ff9090;}
+#s-superliga-clas .clas-val.dg.pos{color:#4fc86a;}
+#s-superliga-clas .clas-val.dg.neg{color:#ff7070;}
+#s-superliga-clas .clas-val.dg.zer{color:rgba(255,255,255,.45);}
+#s-superliga-clas .clas-form{display:flex;align-items:center;gap:5px;justify-content:flex-start;min-height:18px;overflow:hidden;}
+#s-superliga-clas .clas-dot{width:12px;height:12px;border-radius:50%;display:inline-block;box-shadow:0 0 0 1px rgba(255,255,255,.10) inset;}
+#s-superliga-clas .clas-dot.win{background:#34c759;}
+#s-superliga-clas .clas-dot.draw{background:#8a8f98;}
+#s-superliga-clas .clas-dot.loss{background:#ff4d4f;}
+#s-superliga-clas .clas-dot.pending{background:rgba(255,255,255,.18);}
+#s-superliga-clas .clas-empty{padding:28px 12px;text-align:center;font-family:Oswald,sans-serif;font-size:11px;letter-spacing:2px;color:rgba(255,255,255,.55);line-height:1.7;}
+#s-superliga-clas .clas-empty .hint{display:block;margin-top:8px;font-size:10px;letter-spacing:1px;color:rgba(168,85,247,.85);}
+#s-superliga-clas .clas-empty .ea-link{display:inline-block;margin-top:10px;background:linear-gradient(135deg,#3d1a66,#7e22ce);border:1px solid rgba(168,85,247,.55);color:#fff;border-radius:6px;padding:8px 14px;font-family:Oswald,sans-serif;font-size:11px;letter-spacing:1.5px;cursor:pointer;text-decoration:none;}
+#s-superliga-clas .sl-jornadas-wrap{margin-top:14px;padding-top:12px;border-top:1px solid rgba(168,85,247,.30);}
+#s-superliga-clas .sl-jornadas-title{font-family:Oswald,sans-serif;font-size:11px;letter-spacing:2px;color:rgba(168,85,247,.92);margin:0 0 10px;padding:0 12px;}
+#s-superliga-clas .sl-j-team{display:flex;align-items:center;gap:6px;min-width:0;}
+#s-superliga-clas .sl-j-team.is-right{justify-content:flex-end;}
+#s-superliga-clas .sl-j-team-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+#s-superliga-clas .sl-j-shield{width:20px;height:20px;object-fit:contain;flex:0 0 20px;filter:drop-shadow(0 0 2px rgba(0,0,0,.45));}
+#s-superliga-clas .jbtn.c-superliga{background:repeating-linear-gradient(45deg,rgba(255,255,255,.04) 0px,rgba(255,255,255,.04) 1px,transparent 1px,transparent 8px),linear-gradient(90deg,#1c0f30,#3d1a66,#7e22ce,#3d1a66,#1c0f30);border-left:3px solid #a855f7;}
+#s-superliga-clas .jbtn.c-superliga.done{background:linear-gradient(135deg,#1a1400,#3a2c00,#5a4400,#3a2c00,#1a1400);border-left:3px solid #F1C40F;}
+</style>
+<div class="clas-wrap">
+<div id="sl-clas-content">
+<div class="clas-empty">Cargando clasificación…</div>
+</div>
+<div class="sl-jornadas-wrap">
+  <div class="sl-jornadas-title">JORNADAS · SUPERLIGA</div>
+  <div id="sl-jornadas"></div>
+</div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  var STORAGE_KEY_TEAMS    = 'manual_ea_superliga_v1';
+  var STORAGE_KEY_CALENDAR = 'superliga_calendar_v1';
+  var STORAGE_KEY_RESULTS  = 'superliga_results_v1';
+  var TOTAL_TEAMS = 6;
+  var ROUND_ROBINS = 4; // 4 ciclos → 20 jornadas, 4 partidos por pareja
+  var MATCHES_PER_JORNADA = TOTAL_TEAMS / 2;
+
+  function _esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+  function _logoFor(name){
+    if(typeof window.getTeamLogoUrl === 'function'){
+      try { var l = window.getTeamLogoUrl(name); if(l) return l; } catch(_){}
+    }
+    if(window.TEAM_RATINGS && window.TEAM_RATINGS[name] && window.TEAM_RATINGS[name].shield){
+      return window.TEAM_RATINGS[name].shield;
+    }
+    return '';
+  }
+  function _rKey(j, h, a){ return j + '|' + h + '|' + a; }
+
+  function loadTeams(){
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY_TEAMS);
+      if(!raw) return [];
+      var d = JSON.parse(raw);
+      var list = (d && Array.isArray(d.teams)) ? d.teams : [];
+      return list.filter(function(t){ return t && t.name; }).map(function(t){ return t.name; });
+    } catch(_){ return []; }
+  }
+
+  function loadResults(){
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY_RESULTS);
+      return raw ? (JSON.parse(raw) || {}) : {};
+    } catch(_){ return {}; }
+  }
+  function saveResults(r){
+    try { localStorage.setItem(STORAGE_KEY_RESULTS, JSON.stringify(r||{})); } catch(_){}
+  }
+
+  /* Genera 5 jornadas (round-robin simple) con 6 equipos por circle method.
+     `teams` debe tener exactamente 6 entradas. */
+  function singleRoundRobin(teams){
+    var n = teams.length;
+    var arr = teams.slice();
+    var rounds = [];
+    for(var r = 0; r < n - 1; r++){
+      var round = [];
+      for(var i = 0; i < n / 2; i++){
+        var t1 = arr[i], t2 = arr[n - 1 - i];
+        // Alterna home/away por ronda para repartir local/visitante
+        if(r % 2 === 0) round.push([t1, t2]);
+        else            round.push([t2, t1]);
+      }
+      rounds.push(round);
+      // Rota: fija arr[0], desplaza el resto
+      var tail = arr.slice(1);
+      tail.unshift(tail.pop());
+      arr = [arr[0]].concat(tail);
+    }
+    return rounds;
+  }
+
+  /* 20 jornadas: 4 ciclos (ida-vuelta-ida-vuelta) → cada pareja se enfrenta
+     4 veces (2 en casa de A, 2 en casa de B). */
+  function buildSchedule(teams){
+    var first = singleRoundRobin(teams);                 // ida 1
+    var second = first.map(function(round){              // vuelta 1 (swap)
+      return round.map(function(m){ return [m[1], m[0]]; });
+    });
+    return first.concat(second).concat(first).concat(second);
+  }
+
+  function loadCalendar(){
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY_CALENDAR);
+      if(!raw) return null;
+      var d = JSON.parse(raw);
+      if(!d || !Array.isArray(d.teams) || !Array.isArray(d.schedule)) return null;
+      return d;
+    } catch(_){ return null; }
+  }
+  function saveCalendar(cal){
+    try { localStorage.setItem(STORAGE_KEY_CALENDAR, JSON.stringify(cal)); } catch(_){}
+  }
+
+  /* Devuelve el calendario válido. Si la lista de equipos cambió respecto
+     al guardado (orden o composición de los 6), regenera y resetea
+     resultados — la temporada parte de cero al cambiar la plantilla. */
+  function ensureCalendar(){
+    var teamNames = loadTeams();
+    if(teamNames.length < TOTAL_TEAMS) return null;
+    var slice = teamNames.slice(0, TOTAL_TEAMS);
+    var cur = loadCalendar();
+    if(cur && cur.teams.length === TOTAL_TEAMS &&
+       cur.teams.every(function(t,i){ return t === slice[i]; })){
+      return cur;
+    }
+    var schedule = buildSchedule(slice);
+    var cal = { teams: slice, schedule: schedule, ts: Date.now() };
+    saveCalendar(cal);
+    saveResults({}); // nueva temporada → sin resultados
+    return cal;
+  }
+
+  function ensureTeam(store, name){
+    if(!store[name]){
+      store[name] = { name:name, pts:0, pj:0, v:0, e:0, p:0, gf:0, gc:0, dg:0, form:[] };
+    }
+    return store[name];
+  }
+  function addForm(team, r){
+    team.form.push(r);
+    if(team.form.length > 5) team.form = team.form.slice(team.form.length - 5);
+  }
+
+  function collectStandings(cal, results){
+    var teams = {};
+    cal.teams.forEach(function(n){ ensureTeam(teams, n); });
+    cal.schedule.forEach(function(round, idx){
+      var j = idx + 1;
+      round.forEach(function(m){
+        var res = results[_rKey(j, m[0], m[1])];
+        if(!res) return;
+        var H = ensureTeam(teams, m[0]);
+        var A = ensureTeam(teams, m[1]);
+        H.pj++; A.pj++;
+        H.gf += res.gh; H.gc += res.ga;
+        A.gf += res.ga; A.gc += res.gh;
+        if(res.gh > res.ga){
+          H.v++; H.pts += 3; A.p++;
+          addForm(H,'W'); addForm(A,'L');
+        } else if(res.gh < res.ga){
+          A.v++; A.pts += 3; H.p++;
+          addForm(H,'L'); addForm(A,'W');
+        } else {
+          H.e++; A.e++; H.pts++; A.pts++;
+          addForm(H,'D'); addForm(A,'D');
+        }
+      });
+    });
+    var arr = Object.keys(teams).map(function(n){ return teams[n]; });
+    arr.forEach(function(t){ t.dg = t.gf - t.gc; });
+    arr.sort(function(a,b){
+      if(b.pts !== a.pts) return b.pts - a.pts;
+      if(b.dg  !== a.dg ) return b.dg  - a.dg;
+      if(b.gf  !== a.gf ) return b.gf  - a.gf;
+      return a.name.localeCompare(b.name, 'es');
+    });
+    return arr;
+  }
+
+  function formHtml(form){
+    var last = (form || []).slice(-5);
+    if(!last.length) return '<span class="clas-dot pending" title="Sin resultados"></span>';
+    return last.map(function(r){
+      if(r === 'W') return '<span class="clas-dot win" title="Victoria"></span>';
+      if(r === 'D') return '<span class="clas-dot draw" title="Empate"></span>';
+      return '<span class="clas-dot loss" title="Derrota"></span>';
+    }).join('');
+  }
+  function rowZone(pos){
+    if(pos === 1) return 'zone-champ';
+    if(pos === 2 || pos === 3) return 'zone-top';
+    if(pos === 6) return 'zone-bot';
+    return '';
+  }
+
+  function buildClas(){
+    var host = document.getElementById('sl-clas-content');
+    if(!host) return;
+    var cal = ensureCalendar();
+    if(!cal){
+      var n = loadTeams().length;
+      host.innerHTML =
+        '<div class="clas-empty">'
+        + 'Faltan equipos para iniciar la Superliga.'
+        + '<span class="hint">' + n + ' / ' + TOTAL_TEAMS + ' equipos seleccionados</span>'
+        + '<a class="ea-link" onclick="if(typeof pG===\'function\'){pG(function(){go(\'s-ea-manual\')});}else{go(\'s-ea-manual\');}">'
+        + '🎮 Añadir en EA Sports → Europa</a>'
+        + '</div>';
+      var jHost = document.getElementById('sl-jornadas');
+      if(jHost) jHost.innerHTML = '';
+      return;
+    }
+    var results = loadResults();
+    var list = collectStandings(cal, results);
+    var humanIcon = (typeof window.humanIcon === 'function') ? window.humanIcon : function(){ return ''; };
+
+    var html = ''
+      + '<div class="clas-scroll-outer">'
+      +   '<div class="clas-hdr-scroll" id="sl-clas-hdr-scroll">'
+      +     '<div class="clas-table">'
+      +       '<div class="clas-hdr">'
+      +         '<span class="clas-hdr-team">Equipo</span>'
+      +         '<span>PTS</span><span>PJ</span><span>V</span><span>E</span><span>P</span>'
+      +         '<span>GF</span><span>GC</span><span>DG</span><span>%</span><span>Últ. 5</span><span></span>'
+      +       '</div>'
+      +     '</div>'
+      +   '</div>'
+      +   '<div class="clas-scroll" id="sl-clas-body-scroll">'
+      +     '<div class="clas-table">';
+    list.forEach(function(t, idx){
+      var pos = idx + 1;
+      var dgClass = 'clas-val dg ' + (t.dg > 0 ? 'pos' : t.dg < 0 ? 'neg' : 'zer');
+      var pct = t.pj > 0 ? Math.round((t.v / t.pj) * 100) : 0;
+      var shield = _logoFor(t.name);
+      var shieldHtml = shield
+        ? '<img class="clas-team-shield" src="' + _esc(shield) + '" alt="' + _esc(t.name) + '" loading="lazy" decoding="async">'
+        : '';
+      html += ''
+        + '<div class="clas-row ' + rowZone(pos) + '">'
+        +   '<div class="clas-team-cell">'
+        +     '<span class="clas-pos-n">' + pos + '</span>'
+        +     '<span class="clas-team-name">' + shieldHtml + humanIcon(t.name) + _esc(t.name) + '</span>'
+        +   '</div>'
+        +   '<div class="clas-pts">' + t.pts + '</div>'
+        +   '<div class="clas-pj">' + t.pj + '</div>'
+        +   '<div class="clas-val">' + t.v + '</div>'
+        +   '<div class="clas-val">' + t.e + '</div>'
+        +   '<div class="clas-val">' + t.p + '</div>'
+        +   '<div class="clas-val gf">' + t.gf + '</div>'
+        +   '<div class="clas-val gc">' + t.gc + '</div>'
+        +   '<div class="' + dgClass + '">' + (t.dg > 0 ? '+' : '') + t.dg + '</div>'
+        +   '<div class="clas-pct">' + pct + '%</div>'
+        +   '<div class="clas-form">' + formHtml(t.form) + '</div>'
+        +   '<div></div>'
+        + '</div>';
+    });
+    html += '    </div></div></div>';
+    host.innerHTML = html;
+
+    var hdrScroll = document.getElementById('sl-clas-hdr-scroll');
+    var bodyScroll = document.getElementById('sl-clas-body-scroll');
+    if(hdrScroll && bodyScroll){
+      bodyScroll.addEventListener('scroll', function(){ hdrScroll.scrollLeft = bodyScroll.scrollLeft; });
+    }
+
+    buildJornadas(cal, results);
+  }
+
+  function teamCellInner(name, isRight){
+    var shield = _logoFor(name);
+    var shieldHtml = shield
+      ? '<img class="sl-j-shield" src="' + _esc(shield) + '" alt="' + _esc(name) + '" loading="lazy" decoding="async">'
+      : '';
+    var humanIcon = (typeof window.humanIcon === 'function') ? window.humanIcon : function(){ return ''; };
+    var nameHtml = '<span class="sl-j-team-name">' + humanIcon(name) + _esc(name) + '</span>';
+    return isRight ? (nameHtml + shieldHtml) : (shieldHtml + nameHtml);
+  }
+
+  function scoreCellHtml(j, home, away, res){
+    if(res){
+      return '<div class="ms">' + res.gh + '–' + res.ga + '</div>';
+    }
+    var hEsc = String(home).replace(/'/g, "\\'");
+    var aEsc = String(away).replace(/'/g, "\\'");
+    return '<div class="ms p previa" style="cursor:pointer;" onclick="window._openSuperligaMatch(' + j + ',\'' + hEsc + '\',\'' + aEsc + '\')">📋 Previa</div>';
+  }
+
+  function buildJornadas(cal, results){
+    var host = document.getElementById('sl-jornadas');
+    if(!host) return;
+    var html = '';
+    cal.schedule.forEach(function(round, idx){
+      var j = idx + 1;
+      var jid = 'sl-j' + j;
+      var allDone = round.every(function(m){ return !!results[_rKey(j, m[0], m[1])]; });
+      html += '<div class="jblock">';
+      html += '<button class="jbtn c-superliga' + (allDone ? ' done' : '') + '" onclick="tog(\'' + jid + '\')">'
+        + '<div class="pdot">' + (allDone ? '✅' : '▶') + '</div>'
+        + '⭐ <b>Superliga</b>&nbsp; Jornada ' + j + '</button>';
+      html += '<div class="jmatches" id="' + jid + '">';
+      round.forEach(function(m){
+        var res = results[_rKey(j, m[0], m[1])];
+        html += '<div class="mrow">'
+          + '<div class="mn" data-team="' + _esc(m[0]) + '">' + teamCellInner(m[0], false) + '</div>'
+          + scoreCellHtml(j, m[0], m[1], res)
+          + '<div class="mn r" data-team="' + _esc(m[1]) + '">' + teamCellInner(m[1], true) + '</div>'
+          + '</div>';
+      });
+      html += '</div></div>';
+    });
+    host.innerHTML = html;
+  }
+
+  /* ─── API público: persiste un resultado humano de Superliga ───
+     Llamado desde gmEndMatch cuando _gm._isSuperliga === true. */
+  window._superSaveHumanResult = function(j, home, away, gh, ga, events, mvpName, mvpTeamId){
+    if(!j || !home || !away) return;
+    var results = loadResults();
+    var k = _rKey(j, home, away);
+    var prev = results[k] || {};
+    var safeEvents = (events || []).filter(function(e){ return e && e.type !== 'pen-result'; }).map(function(e){
+      var nm = e.player || e.name || '';
+      var lbl = (e.num && e.num !== '0' ? e.num + '. ' : '') + nm;
+      return { id:e.id, type:e.type, team:e.team, min:e.min, player:lbl };
+    });
+    results[k] = {
+      gh: gh, ga: ga,
+      events: safeEvents,
+      mvp: mvpName || prev.mvp || '',
+      mvpTeam: (mvpTeamId === 'a' ? home : mvpTeamId === 'b' ? away : (prev.mvpTeam || '')),
+      ts: Date.now()
+    };
+    saveResults(results);
+    buildClas();
+  };
+
+  /* ─── API público: abre el flujo Previa → gmOpen para un partido ─── */
+  window._openSuperligaMatch = function(j, home, away){
+    var cal = ensureCalendar();
+    if(!cal) return;
+    var results = loadResults();
+    if(results[_rKey(j, home, away)]) return; /* ya jugado */
+    var isHvH = true; /* todos los equipos de Superliga son humanos */
+    var duracion = (typeof window._mlRealDurationLabel === 'function')
+      ? window._mlRealDurationLabel({ isHvH: true, humanInvolved: true })
+      : '15 min 45 s';
+    window._ppPreviaTeams = { home: home, away: away, j: j, comp: 'superliga' };
+    window._ppCustomCallback = function(){
+      window._ppPreviaTeams = null;
+      if(typeof window.abrirSuperliga === 'function'){
+        try { window.abrirSuperliga(j, home, away); } catch(_){}
+      }
+    };
+    if(typeof window.showPrePartidoOverlay === 'function'){
+      window.showPrePartidoOverlay('slj' + j + 'm0', 'superliga', 'No', duracion, true);
+    }
+  };
+
+  window._superligaRebuild = buildClas;
+
+  document.addEventListener('DOMContentLoaded', function(){ buildClas(); });
+  /* Re-render al volver a la pantalla (por si el admin acaba de añadir
+     un equipo en EA Sports → Europa o se acaba de jugar un partido). */
+  document.addEventListener('click', function(ev){
+    var card = ev.target && ev.target.closest && ev.target.closest('.submenu-card');
+    if(card && /superliga/i.test(card.textContent || '')) setTimeout(buildClas, 60);
+  });
+  /* Tiny polling: si la pantalla está activa y cambia el storage de
+     equipos manuales, refresca. Coste despreciable. */
+  setInterval(function(){
+    var sc = document.getElementById('s-superliga-clas');
+    if(sc && sc.classList.contains('active')) buildClas();
+  }, 4000);
+})();
+</script>
 </div>

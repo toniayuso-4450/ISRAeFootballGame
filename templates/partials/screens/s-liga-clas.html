@@ -382,7 +382,13 @@
 
   window.buildLigaClas = buildLigaClas;
   window.collectStandings = collectStandings;
-  window.rebuildLigaPlayerStats = rebuildLigaPlayerStats;
+  /* `rebuildLigaPlayerStats` se define en IIFE #2 (línea ~770).
+     Antes había un `window.rebuildLigaPlayerStats = rebuildLigaPlayerStats;`
+     aquí que disparaba ReferenceError porque la función NO está en
+     scope de este IIFE — y eso abortaba el resto del bloque (entre
+     otras cosas, el `addEventListener('DOMContentLoaded',
+     buildLigaClas)` y el `bindLeagueObserver()`). Exposición trasladada
+     a IIFE #2. 2026-05-10. */
   document.addEventListener('DOMContentLoaded', buildLigaClas);
 
   var leagueObserverBound = false;
@@ -390,8 +396,52 @@
     if(leagueObserverBound || typeof MutationObserver === 'undefined') return;
     var root = document.getElementById('s-liga-cal');
     if(!root) return;
-    var observer = new MutationObserver(function(){ buildLigaClas(); });
-    observer.observe(root, {childList:true, subtree:true, characterData:true, attributes:true, attributeFilter:['class']});
+    /* BUG CRÍTICO 2026-05-11: este observer NO tenía debounce y se
+       dispararaba en CADA mutación dentro de s-liga-cal. Las cards
+       IA-vs-IA viven aquí dentro, y _refreshJugarHints toggle-a la
+       clase `is-jugar-hint` en los .ml-timer cada 100ms. Además
+       iaSimLive mete eventos en el acta y actualiza el score → otra
+       cascada de mutaciones childList/characterData. Cada uno
+       disparaba buildLigaClas (rebuild completo de la clasificación
+       con sort, layout, render...) → JS thread saturado → setInterval
+       del cronómetro NO podía ejecutarse → todos los partidos se
+       quedaban a 0'. Causa raíz del bug "ninguna simulación funciona".
+
+       Fix: (a) Debounce 500ms — al menos 500ms entre rebuilds.
+            (b) Filtrar mutaciones puramente cosméticas (clases
+                `is-jugar-hint`, `running`, `finished`) que no afectan
+                a la clasificación. */
+    var _bldDeb = null;
+    var _IGNORE_CLASS_RE = /\b(is-jugar-hint|running|finished|is-pp-env-hint|state-playing|state-finished)\b/;
+    function _bldSchedule(){
+      if (_bldDeb) return; /* leading-edge throttle */
+      _bldDeb = setTimeout(function(){
+        _bldDeb = null;
+        try { buildLigaClas(); } catch(_){}
+      }, 500);
+    }
+    var observer = new MutationObserver(function(muts){
+      for (var i = 0; i < muts.length; i++){
+        var m = muts[i];
+        if (m.type === 'attributes' && m.attributeName === 'class'){
+          /* Solo nos interesan cambios de clase relevantes para la
+             clasificación (no clases puramente UI). Si la clase nueva
+             contiene SOLO toggles cosméticos, ignorar. */
+          var oldC = m.oldValue || '';
+          var newC = (m.target && m.target.className) || '';
+          /* Heurística simple: si las clases diferenciadas son SOLO
+             las cosméticas conocidas, skip. Comprobamos si AMBAS
+             listas comparten exactamente las mismas clases salvo las
+             cosméticas. */
+          var oldFiltered = oldC.replace(_IGNORE_CLASS_RE, '').replace(/\s+/g, ' ').trim();
+          var newFiltered = newC.replace(_IGNORE_CLASS_RE, '').replace(/\s+/g, ' ').trim();
+          if (oldFiltered === newFiltered) continue;
+        }
+        _bldSchedule();
+        return;
+      }
+    });
+    observer.observe(root, {childList:true, subtree:true, characterData:true, attributes:true, attributeFilter:['class'], attributeOldValue:true});
     leagueObserverBound = true;
   }
   bindLeagueObserver();
@@ -473,6 +523,7 @@
     'yel': 'ps-yel',
     'red': 'ps-red',
     'mvp': 'ps-mvp',
+    'cs':  'ps-cs',
     'pen-prov': 'ps-pen-prov',
     'pen-parado': 'ps-pen-parado',
     'pen-gol': 'ps-pen-gol',
@@ -483,6 +534,7 @@
 
   var LIGA_STAT_CATEGORIES = [
     { key:'goles-total', title:'Goleadores',            icon:'⚽️', top:6 },
+    { key:'cs',          title:'Portería imbatida',     icon:'🧤', top:6 },
     { key:'yel',         title:'Tarjetas amarillas',    icon:'🟨', top:6 },
     { key:'red',         title:'Tarjetas rojas',        icon:'🟥', top:6 },
     { key:'pen-prov',    title:'Penaltis provocados',   icon:'🤦‍♂️', top:6 },
@@ -609,6 +661,131 @@
 
   var LIGA_PLAYER_MATCH_STORE = window.LIGA_PLAYER_MATCH_STORE || {};
   window.LIGA_PLAYER_MATCH_STORE = LIGA_PLAYER_MATCH_STORE;
+
+  /* Restaurar SOLO las entradas no-Liga (Copa, Recopa, SC, Champions,
+     UEL, UECL, Superliga…) desde localStorage. Las entradas de Liga
+     (key con pipes "j|home|away") se rehidratan desde ef_liga38_v4
+     vía hydrateStoreFromSavedResults — no haría falta persistirlas.
+     Reportado 2026-05-07: tras jugar Copa del Rey la plantilla
+     mostraba 0 stats al recargar porque LIGA_PLAYER_MATCH_STORE
+     vivía solo en memoria y se perdía. */
+  try {
+    var _lpmRaw = localStorage.getItem('liga_player_match_store_extra_v1');
+    if (_lpmRaw) {
+      var _lpmObj = JSON.parse(_lpmRaw) || {};
+      Object.keys(_lpmObj).forEach(function(k){
+        if (k && k.indexOf('|') === -1 && !LIGA_PLAYER_MATCH_STORE[k]) {
+          LIGA_PLAYER_MATCH_STORE[k] = _lpmObj[k];
+        }
+      });
+    }
+  } catch(_){}
+
+  /* Persistir las entradas no-Liga del store con un debounce de
+     300 ms para no escribir en localStorage en cada gol. */
+  var _lpmSaveTimer = null;
+  function _persistMatchStoreExtras(){
+    if (_lpmSaveTimer) clearTimeout(_lpmSaveTimer);
+    _lpmSaveTimer = setTimeout(function(){
+      _lpmSaveTimer = null;
+      try {
+        var src = window.LIGA_PLAYER_MATCH_STORE || {};
+        var out = {};
+        Object.keys(src).forEach(function(k){
+          if (k && k.indexOf('|') === -1) out[k] = src[k];
+        });
+        var ser = JSON.stringify(out);
+        if (ser.length <= 1024 * 1024) {
+          localStorage.setItem('liga_player_match_store_extra_v1', ser);
+        }
+      } catch(_){}
+    }, 300);
+  }
+  window._persistMatchStoreExtras = _persistMatchStoreExtras;
+
+  /* Inferencia de competición a partir del matchKey (2026-05-04).
+     Cada competición usa un prefijo distinto; mapeamos para taggear
+     el evento sin tener que tocar todos los callers a la vez. El
+     usuario quiere que cada competición tenga sus stats AISLADAS
+     (excepto Liga + Copa que se SUMAN como "EA Sports"):
+       · liga      → Liga EA Sports (j1m*, lj*, j*m*…)
+       · copa      → Copa del Rey (cdr-*, copa-*)
+       · superliga → Superliga (sl-*)
+       · ucl       → Champions / Previa Champions (ucl-*, wprev-*, champ-*)
+       · uel       → Europa League (uel-*)
+       · uecl      → Conference (uecl-*) */
+  /* Sub-fases UCL (2026-05-08): la pantalla s-ucl-stats SUMA SOLO
+     'ucl' (Grupos + Playoffs / Final). Las fases previas (Previa
+     Champions, Open Qualifier, Wild Card) van a buckets separados
+     ('ucl-prev', 'ucl-oq', 'ucl-wc'). El bucket consolidado lo sigue
+     haciendo `_persistBucket` al escribir `ef_player_stats_ucl_v1`
+     (suma de los 4) para no romper otras pantallas (plantilla
+     Bayern, etc.).
+
+     Comps nuevas (2026-05-08, mismo día):
+       · sc       → Supercopa de España (matchKey empieza con sc-/sc_
+                    o storeKey contiene `|sc|`/`|sc-final|`).
+       · usc      → Supercopa de Europa (usc-/usc_/`|usc|`).
+       · recopa   → Recopa Europa (recopa-/cal-rec-/`|recopa|`).
+       · inter    → Intercontinental (inter-/cal-inter-/`|inter|`).
+       · mundial  → Mundial de Clubes (mundial-/cwc-/`|mundial|`).
+       · sel      → Selecciones FIFA (cal-sel-/cal-mf-/`|sel|`).
+       · amistoso → Amistosos (cal-ams-/`|amistoso|`). */
+  function _inferCompetition(matchKey){
+    var k = String(matchKey || '').toLowerCase();
+    if (!k) return 'liga';
+    /* Fase de Liga UCL/UEL/UECL Swiss-format (mk = `eurfase_<comp>_<jor>_<idx>`).
+       Petición usuario 2026-05-10: rutear estadísticas por competición
+       correctamente. Evaluar ANTES de los catch-all 'uecl'/'uel'/'ucl'
+       para que los partidos de UEL/UECL fase de liga no caigan en el
+       bucket equivocado. */
+    if (k.indexOf('eurfase_uecl_') === 0) return 'uecl';
+    if (k.indexOf('eurfase_uel_')  === 0) return 'uel';
+    if (k.indexOf('eurfase_ucl_')  === 0) return 'ucl';
+    if (k.indexOf('uecl') === 0 || k.indexOf('-uecl') !== -1 || k.indexOf('|uecl|') !== -1) return 'uecl';
+    if (k.indexOf('uel')  === 0 || k.indexOf('-uel')  !== -1 || k.indexOf('|uel|')  !== -1) return 'uel';
+    /* Sub-fases UCL: evaluar ANTES del catch-all 'ucl' para que el
+       bucket principal solo contenga Grupos + Playoffs. */
+    if (k.indexOf('wprev') !== -1) return 'ucl-prev';
+    if (k.indexOf('oq_') === 0 || k.indexOf('-oq_') !== -1
+        || k.indexOf('oq-') === 0 || k.indexOf('-oq-') !== -1
+        || k.indexOf('|oq|') !== -1) return 'ucl-oq';
+    if (k.indexOf('wc_') === 0 || k.indexOf('-wc_') !== -1
+        || k.indexOf('wc-') === 0 || k.indexOf('-wc-') !== -1
+        || k.indexOf('|wc|') !== -1) return 'ucl-wc';
+    if (k.indexOf('ucl')  === 0 || k.indexOf('-ucl')  !== -1
+        || k.indexOf('|ucl|') !== -1 || k.indexOf('|ucl-fin|') !== -1
+        || k.indexOf('champ') === 0) return 'ucl';
+    /* Comps con sub-finales: evaluar `usc` ANTES que `sc` para que
+       "Supercopa Europa" no caiga en Supercopa España. */
+    if (k.indexOf('usc') === 0 || k.indexOf('-usc') !== -1
+        || k.indexOf('|usc|') !== -1 || k.indexOf('|usc-fin|') !== -1) return 'usc';
+    if (k.indexOf('sc-') === 0 || k.indexOf('|sc|') !== -1
+        || k.indexOf('|sc-final|') !== -1
+        || k.indexOf('sc-semis') === 0 || k.indexOf('sc-final') === 0
+        || k.indexOf('-sc-') !== -1) return 'sc';
+    if (k.indexOf('recopa') === 0 || k.indexOf('-recopa') !== -1
+        || k.indexOf('|recopa|') !== -1 || k.indexOf('|recopa-fin|') !== -1
+        || k.indexOf('cal-rec-') !== -1) return 'recopa';
+    if (k.indexOf('inter') === 0 || k.indexOf('-inter') !== -1
+        || k.indexOf('|inter|') !== -1 || k.indexOf('|inter-fin|') !== -1
+        || k.indexOf('cal-inter-') !== -1) return 'inter';
+    if (k.indexOf('mundial') !== -1 || k.indexOf('|mundial|') !== -1
+        || k.indexOf('cwc') === 0 || k.indexOf('-cwc') !== -1
+        || k.indexOf('|cwc|') !== -1) return 'mundial';
+    if (k.indexOf('|sel|') !== -1 || k.indexOf('|sel-fin|') !== -1
+        || k.indexOf('cal-sel') !== -1 || k.indexOf('cal-mf-') !== -1) return 'sel';
+    if (k.indexOf('|amistoso|') !== -1 || k.indexOf('cal-ams') !== -1
+        || k.indexOf('amistoso') === 0) return 'amistoso';
+    if (k.indexOf('sl-')  === 0 || k.indexOf('-sl')  !== -1
+        || k.indexOf('|superliga|') !== -1
+        || k.indexOf('superliga') !== -1) return 'superliga';
+    if (k.indexOf('cdr-') === 0 || k.indexOf('copa-') === 0
+        || k.indexOf('|copa|') !== -1 || k.indexOf('|copa-fin|') !== -1
+        || k.indexOf('copa') === 0) return 'copa';
+    return 'liga';
+  }
+  window._inferMatchCompetition = _inferCompetition;
 
   function applyEventToRoster(roster, teamName, playerName, type, ico){
     teamName = canonicalTeamName(teamName);
@@ -740,7 +917,13 @@
     buildLigaStatsDashboard();
   }
 
-  window.registrarLigaPlayerStats = function(matchKey, teamA, teamB, evts, mvpName, mvpTeam){
+  window.registrarLigaPlayerStats = function(matchKey, teamA, teamB, evts, mvpName, mvpTeam, competition){
+    /* `competition` opcional (2026-05-04): si no viene, lo deducimos
+       del prefijo del matchKey via _inferCompetition. Permite que
+       todos los callers existentes sigan funcionando sin tocarlos
+       y que los nuevos (Copa, Superliga, Champions, UEL, UECL)
+       puedan pasar el tag explícito. */
+    var comp = competition || _inferCompetition(matchKey);
     LIGA_PLAYER_MATCH_STORE[matchKey] = {
       teamA: canonicalTeamName(teamA),
       teamB: canonicalTeamName(teamB),
@@ -751,9 +934,19 @@
         return copy;
       }),
       mvpName: mvpName || '',
-      mvpTeam: canonicalTeamName(mvpTeam || '')
+      mvpTeam: canonicalTeamName(mvpTeam || ''),
+      competition: comp
     };
+    /* 2026-05-20: durante un batch de Liga EA (simularTodasJornadasIAAsync)
+       NO rebuildeamos por partido — eran 380 rebuilds, cada uno iterando
+       todos los partidos previos del store. El wrapper del batch lo
+       hace UNA sola vez al final. */
+    if (window._ligaBatchInProgress) return;
     rebuildLigaPlayerStats();
+    /* Persistir extras (no-Liga) para que sobrevivan a recarga. */
+    if (typeof window._persistMatchStoreExtras === 'function') {
+      try { window._persistMatchStoreExtras(); } catch(_){}
+    }
   };
 
   function getLigaStatFromRow(row, key){
@@ -819,7 +1012,9 @@
 
     function renderRows(rows, startIndex){
       return rows.map(function(item, idx){
-        return '<div class="liga-stat-row"><div class="liga-stat-rank">' + (startIndex + idx) + '</div><div class="liga-stat-player"><div class="liga-stat-name">' + escapeHtml(item.name) + '</div><div class="liga-stat-team">' + escapeHtml(item.team) + '</div></div><div class="liga-stat-value">' + item.value + '</div></div>';
+        var humanCls = (typeof window._humanPlayerClass === 'function')
+          ? window._humanPlayerClass(item.team) : '';
+        return '<div class="liga-stat-row"><div class="liga-stat-rank">' + (startIndex + idx) + '</div><div class="liga-stat-player"><div class="liga-stat-name' + humanCls + '">' + escapeHtml(item.name) + '</div><div class="liga-stat-team">' + escapeHtml(item.team) + '</div></div><div class="liga-stat-value">' + item.value + '</div></div>';
       }).join('');
     }
 
@@ -856,15 +1051,50 @@
 
     if(!targets.length) return;
 
-    var observer = new MutationObserver(function(){
-      buildLigaStatsDashboard();
+    /* BUG CRÍTICO 2026-05-11: sin debounce, este observer ejecutaba
+       buildLigaStatsDashboard (rebuild de stats heavy: top scorers,
+       MVPs, tarjetas...) en CADA mutación dentro de s-liga-cal +
+       plantillas. Las cards live IA-vs-IA viven en s-liga-cal y
+       generan dozens de mutaciones por segundo (clases is-jugar-hint
+       cada 100ms vía polling, eventos del acta cada game-minute via
+       iaSimLive, score updates...). El thread JS se saturaba y los
+       cronómetros se quedaban a 0'.
+
+       Fix: throttle leading-edge 500ms + skip mutaciones de classList
+       puramente cosméticas. Mismo patrón que bindLeagueObserver. */
+    var _statsDeb = null;
+    var _IGNORE_CLASS_RE2 = /\b(is-jugar-hint|running|finished|is-pp-env-hint|state-playing|state-finished)\b/;
+    function _statsSchedule(){
+      if (_statsDeb) return;
+      _statsDeb = setTimeout(function(){
+        _statsDeb = null;
+        try { buildLigaStatsDashboard(); } catch(_){}
+      }, 500);
+    }
+    var observer = new MutationObserver(function(muts){
+      for (var i = 0; i < muts.length; i++){
+        var m = muts[i];
+        if (m.type === 'attributes' && m.attributeName === 'class'){
+          var oldC = m.oldValue || '';
+          var newC = (m.target && m.target.className) || '';
+          var oldF = oldC.replace(_IGNORE_CLASS_RE2, '').replace(/\s+/g, ' ').trim();
+          var newF = newC.replace(_IGNORE_CLASS_RE2, '').replace(/\s+/g, ' ').trim();
+          if (oldF === newF) continue;
+        }
+        _statsSchedule();
+        return;
+      }
     });
 
     targets.forEach(function(t){
-      observer.observe(t, { childList:true, subtree:true, characterData:true, attributes:true });
+      observer.observe(t, { childList:true, subtree:true, characterData:true, attributes:true, attributeFilter:['class','data-state','data-finished'], attributeOldValue:true });
     });
     ligaStatsObserverBound = true;
   }
+
+  /* Exposición global (movida desde IIFE #1 donde la función no
+     estaba en scope y disparaba ReferenceError). 2026-05-10. */
+  window.rebuildLigaPlayerStats = rebuildLigaPlayerStats;
 
   bindLigaStatsObserver();
 })();
